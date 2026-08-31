@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Hi, I'm Kirill Molodykh 👋</h1>
-  <p><strong>Fullstack QA Engineer | Test Automation (Python)</strong></p>
-  <p><em>Backend-focused QA Engineer expanding across the full test pyramid: from async microservices and load testing to UI automation.</em></p>
+  <p><strong>Fullstack QA Engineer | Manual & Automation (Python)</strong></p>
+  <p><em>QA Engineer with a focus on manual testing and growing expertise in test automation with Python — from API and backend testing to performance and UI automation.</em></p>
 
   <p>
     <a href="https://t.me/StraikK0"><img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram" /></a>
@@ -11,14 +11,16 @@
 ---
 ### 🛡️ About Me
 
-* **Working at:** **WB Tech**
-* **Testing Philosophy:** **Shift-Left Quality** — zero tolerance for flaky tests, isolated data, and fast CI feedback loops.
-* **Quality Strategy:** **Full Pyramid** — deep backend isolation backed by targeted performance and UI tests.
-* **Current Focus:** Expanding **Web UI automation** to round out the complete testing lifecycle.
+* **Company:** WB Tech
+* **Testing Philosophy:** **Shift-Left Quality** — reliable, isolated and deterministic tests with fast CI feedback loops.
+* **Quality Strategy:** **Full Test Pyramid** — isolated backend testing supported by targeted performance and UI automation.
+* **Current Focus:** Developing my Web UI automation skills with Playwright and Pytest.
+---
 
 ### 🛠️ Tech Stack & Tooling
 
-**Test Automation, Frameworks & Protocols**
+
+**Automation & Testing**
 
 ![Python 3.12+](https://img.shields.io/badge/Python_3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)
@@ -60,9 +62,9 @@
 
 | Project | Description | Tech Stack |
 | :--- | :--- | :--- |
-| [isolation-api-tests](#) | Microservice banking system (API Gateway, Operations). Demonstrates asynchronous financial operation processing via Kafka, isolated domain testing, dual HTTP/gRPC API support, and automated CI/CD test runs. | `Python 3.12` `Pytest` `gRPC` `FastAPI` `Kafka` `PostgreSQL` `SQLAlchemy` `Pydantic` `Docker` `Allure` |
-| [performance-tests](#) | High-throughput load testing framework for microservice banking stand. Features decoupled HTTP/gRPC clients, automated data seeding via Locust hooks, and headless CI runs with GitHub Pages reports. | `Python 3.12` `Locust` `gRPC` `HTTPX` `Pydantic` `Faker` `Docker` `Prometheus` `Grafana` |
-| [autotest-ui](#) | E2E Web UI automation framework built with Page Object Model, strict static typing, Allure reporting, and automated AI Code Review in CI/CD pipelines. | `Python 3.12` `Playwright` `Pytest` `Poetry` `Ruff` `Mypy` `Allure` |
+| [isolation-api-tests](https://github.com/Barbaron86/isolation-api-tests) | Microservice-based banking system (API Gateway, Operations). Demonstrates asynchronous financial operation processing via Kafka, isolated domain testing, dual HTTP/gRPC API support, and automated CI/CD test runs. | `Python 3.12` `Pytest` `gRPC` `FastAPI` `Kafka` `PostgreSQL` `SQLAlchemy` `Pydantic` `Docker` `Allure` |
+| [performance-tests](https://github.com/Barbaron86/performance-tests) | High-throughput load testing framework for a microservice-based banking system. Features decoupled HTTP/gRPC clients, automated test data seeding via Locust hooks, and CI-integrated reporting with GitHub Pages. | `Python 3.12` `Locust` `gRPC` `HTTPX` `Pydantic` `Faker` `Docker` `Prometheus` `Grafana` |
+| [autotest-ui](https://github.com/Barbaron86/autotest-ui) | E2E Web UI automation framework built with Playwright and Pytest, using Page Object Model, strict static typing, Allure reporting, and automated AI Code Review in CI/CD pipelines. | `Python 3.12` `Playwright` `Pytest` `Poetry` `Ruff` `Mypy` `Allure` |
 ---
 
 <div align="center">
