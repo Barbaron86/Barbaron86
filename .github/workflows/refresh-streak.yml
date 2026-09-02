@@ -1,0 +1,18 @@
+name: Refresh GitHub Streak
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  purge-cache:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Purge GitHub Camo cache
+        run: |
+          curl --fail --show-error --silent \
+            -X PURGE \
+            "https://camo.githubusercontent.com/af8ef7b291f8b5eb6c465c36d0824169ea2f7dc1d8b3ee33df540c06b8b48b60/68747470733a2f2f73747265616b2d73746174732e64656d6f6c61622e636f6d3f757365723d4261726261726f6e3836267468656d653d746f6b796f6e6967687426686964655f626f726465723d74727565"
