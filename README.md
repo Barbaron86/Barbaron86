@@ -14,7 +14,7 @@
 * **Company:** WB Tech
 * **Testing Philosophy:** **Shift-Left Quality** — reliable, isolated and deterministic tests with fast CI feedback loops.
 * **Quality Strategy:** **Full Test Pyramid** — isolated backend testing supported by targeted performance and UI automation.
-* **Current Focus:** Developing my Web UI automation skills with Playwright and Pytest.
+* **Code Design:** Building reusable and extensible test frameworks with OOP, separation of concerns, and SOLID principles.
 ---
 
 ### 🛠️ Tech Stack & Tooling
@@ -32,6 +32,7 @@
 ![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
 ![Faker](https://img.shields.io/badge/Faker-DC3545?style=for-the-badge&logo=python&logoColor=white)
 ![Allure](https://img.shields.io/badge/Allure-FFA800?style=for-the-badge&logo=qameta&logoColor=white)
+![Loguru](https://img.shields.io/badge/-Loguru-41B5BE?style=for-the-badge)
 
 **Brokers, Databases & Storage**
 
@@ -64,7 +65,7 @@
 | :--- | :--- | :--- |
 | [isolation-api-tests](https://github.com/Barbaron86/isolation-api-tests) | Microservice-based banking system (API Gateway, Operations). Demonstrates asynchronous financial operation processing via Kafka, isolated domain testing, dual HTTP/gRPC API support, and automated CI/CD test runs. | `Python 3.12` `Pytest` `gRPC` `FastAPI` `Kafka` `PostgreSQL` `SQLAlchemy` `Pydantic` `Docker` `Allure` |
 | [performance-tests](https://github.com/Barbaron86/performance-tests) | High-throughput load testing framework for a microservice-based banking system. Features decoupled HTTP/gRPC clients, automated test data seeding via Locust hooks, and CI-integrated reporting with GitHub Pages. | `Python 3.12` `Locust` `gRPC` `HTTPX` `Pydantic` `Faker` `Docker` `Prometheus` `Grafana` |
-| [autotest-ui](https://github.com/Barbaron86/autotest-ui) | E2E Web UI automation framework built with Playwright and Pytest, using Page Object Model, strict static typing, Allure reporting, and automated AI Code Review in CI/CD pipelines. | `Python 3.12` `Playwright` `Pytest` `Poetry` `Ruff` `Mypy` `Allure` |
+| [autotest-ui](https://github.com/Barbaron86/autotest-ui) | Web UI test automation framework with layered Page Object architecture, cross-browser parallel execution, reusable in-memory authentication state, Allure reporting, UI interaction coverage, and CI/CD with optional AI-assisted pull request review. | `Python 3.12` `Playwright` `Pytest` `pytest-xdist` `Pydantic` `Poetry` `Ruff` `Mypy` `Allure` `Loguru` |
 ---
 
 <div align="center">
