@@ -72,7 +72,7 @@
 
 ### 📊 GitHub Activity
 
-![Kirill's GitHub Streak](https://streak-stats.demolab.com?user=Barbaron86&theme=tokyonight&hide_border=true)
+![Kirill's GitHub Streak](https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak.svg)
 
 <br>
 
