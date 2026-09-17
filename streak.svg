@@ -1,0 +1,89 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="495"
+  height="260"
+  viewBox="0 0 495 260"
+  role="img"
+  aria-labelledby="title description"
+>
+  <title id="title">Barbaron86 GitHub Streak</title>
+  <desc id="description">
+    Total contributions: 391 since Mar 13, 2025.
+    Current streak: 19 days.
+    Longest streak: 19 days.
+    Contributions this year: 383.
+    Active days this year: 75.
+    Best day: 31 on Sep 3, 2026.
+  </desc>
+
+  <style>
+    .background { fill: #1a1b27; }
+    .divider { stroke: #414868; stroke-width: 1; }
+    .value {
+      fill: #70a5fd;
+      font-family: "Segoe UI", Ubuntu, Arial, sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      text-anchor: middle;
+    }
+    .current-value { fill: #bf91f3; }
+    .label {
+      fill: #c0caf5;
+      font-family: "Segoe UI", Ubuntu, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-anchor: middle;
+    }
+    .subtext {
+      fill: #787c99;
+      font-family: "Segoe UI", Ubuntu, Arial, sans-serif;
+      font-size: 11px;
+      text-anchor: middle;
+    }
+    .flame {
+      fill: #bf91f3;
+      font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
+      font-size: 22px;
+      text-anchor: middle;
+    }
+    .trophy {
+      fill: #70a5fd;
+      font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
+      font-size: 20px;
+      text-anchor: middle;
+    }
+  </style>
+
+  <rect class="background" x="0" y="0" width="495" height="260" rx="10" />
+  <line class="divider" x1="165" y1="24" x2="165" y2="236" />
+  <line class="divider" x1="330" y1="24" x2="330" y2="236" />
+  <line class="divider" x1="24" y1="130" x2="471" y2="130" />
+
+  <!-- TOP ROW -->
+  <text class="value" x="82.5" y="62">391</text>
+  <text class="label" x="82.5" y="88">Total Contributions</text>
+  <text class="subtext" x="82.5" y="110">Since Mar 13, 2025</text>
+
+  <text class="flame" x="247.5" y="38">🔥</text>
+  <text class="value current-value" x="247.5" y="66">19</text>
+  <text class="label" x="247.5" y="88">Current Streak</text>
+  <text class="subtext" x="247.5" y="110">Aug 30, 2026 — Sep 17, 2026</text>
+
+  <text class="trophy" x="412.5" y="38">🏆</text>
+  <text class="value" x="412.5" y="66">19</text>
+  <text class="label" x="412.5" y="88">Longest Streak</text>
+  <text class="subtext" x="412.5" y="110">Aug 30, 2026 — Sep 17, 2026</text>
+
+  <!-- BOTTOM ROW -->
+  <text class="value" x="82.5" y="172">383</text>
+  <text class="label" x="82.5" y="198">Contributions 2026</text>
+  <text class="subtext" x="82.5" y="220">Current year total</text>
+
+  <text class="value" x="247.5" y="172">75</text>
+  <text class="label" x="247.5" y="198">Active Days</text>
+  <text class="subtext" x="247.5" y="220">Days with contributions</text>
+
+  <text class="value" x="412.5" y="172">31</text>
+  <text class="label" x="412.5" y="198">Best Day</text>
+  <text class="subtext" x="412.5" y="220">Sep 3, 2026</text>
+</svg>
