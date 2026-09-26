@@ -4,14 +4,19 @@
   <p><em>QA Engineer with a focus on manual testing and growing expertise in test automation with Python — from API and backend testing to performance and UI automation.</em></p>
 
   <p>
-    <a href="https://t.me/StraikK0"><img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram" /></a>
+    <a href="https://www.linkedin.com/in/kirill-molodykh/">
+      <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
+    </a>
+    <a href="https://t.me/StraiKk0">
+      <img src="https://img.shields.io/badge/Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram">
+    </a>
   </p>
 </div>
 
 ---
 ### 🛡️ About Me
 
-* **Company:** WB Tech
+* **Company:** **RWB (Wildberries & Russ)**
 * **Testing Philosophy:** **Shift-Left Quality** — reliable, isolated and deterministic tests with fast CI feedback loops.
 * **Quality Strategy:** **Full Test Pyramid** — isolated backend testing supported by targeted performance and UI automation.
 * **Code Design:** Building reusable and extensible test frameworks with OOP, separation of concerns, and SOLID principles.
@@ -57,6 +62,7 @@
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
 ![Proxyman](https://img.shields.io/badge/Proxyman-0A84FF?style=for-the-badge&logo=proxyman&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+
 ---
 
 ### 📁 Featured Repositories
