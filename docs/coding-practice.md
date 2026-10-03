@@ -28,6 +28,8 @@ runs only when the publication workflow itself changes on that branch.
 
 The schedule always checks out `main`. Generation runs with read-only
 repository permissions; only the publication job has `contents: write`.
+Generation records `git rev-parse HEAD` as an output. Publication checks out
+that exact SHA and verifies it before using the generated artifact.
 The workflow shares `profile-assets` concurrency with Snake and Streak.
 Publication clones the newest `output`, overlays only complete successful
 theme pairs, skips identical files and retries non-force pushes up to three
