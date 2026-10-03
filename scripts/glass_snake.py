@@ -21,7 +21,7 @@ def wrap_snake(content: str, theme_name: str) -> str:
     if 'id="glass-snake-bg"' in content:
         raise ValueError("Input is already glass-styled")
     theme = THEMES[theme_name]
-    if not re.search(r"<svg\\b[^>]*>", content):
+    if not re.search(r"<svg\b[^>]*>", content):
         raise ValueError("Expected snk SVG root")
     if "</style>" not in content:
         raise ValueError("Expected snk stylesheet; do not replace animations")
@@ -39,7 +39,7 @@ def wrap_snake(content: str, theme_name: str) -> str:
 <text x="15" y="-35" fill="{theme['text']}" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="1">CONTRIBUTION SNAKE</text>
 <text x="850" y="-35" text-anchor="end" fill="{theme['muted']}" font-family="Segoe UI,Arial,sans-serif" font-size="11">GitHub activity</text>
 </g>'''
-    content = re.sub(r"<svg\\b[^>]*>", lambda match: re.sub(r'viewBox="[^"]+"', 'viewBox="-16 -56 880 235"', re.sub(r'height="[^"]+"', 'height="235"', match.group(0))), content, count=1)
+    content = re.sub(r"<svg\b[^>]*>", lambda match: re.sub(r'viewBox="[^"]+"', 'viewBox="-16 -56 880 235"', re.sub(r'height="[^"]+"', 'height="235"', match.group(0))), content, count=1)
     content = content.replace("</style>", "</style>" + header + panel, 1)
     ET.fromstring(content)
     return content if content.endswith("\n") else content + "\n"

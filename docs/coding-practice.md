@@ -54,10 +54,10 @@ contains only the current successful platforms. Local generation can also
 update an existing directory; invalid requests retain its last good cards.
 
 The generator exits 1 on partial/full failure and 0 on complete success.
-PR CI validates Python syntax without requesting live statistics or writing
-to GitHub. Before creating the PR, all 31 offline unit and local Git integration
-tests passed. At the owner's explicit request, the test source was then removed;
-the delivered branch contains only implementation and syntax validation.
+During development, 31 offline unit and local Git integration tests passed.
+At the owner's explicit request, their source and the separate PR CI workflow
+were removed. They are not ongoing CI checks. The refresh workflow checks Python
+syntax before generation; this does not replace behavioral testing.
 
 ## Sources and rendering
 

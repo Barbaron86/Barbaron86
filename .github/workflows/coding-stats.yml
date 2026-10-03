@@ -32,14 +32,16 @@ jobs:
     outputs:
       has_assets: ${{ steps.refresh.outputs.has_assets }}
       refresh_outcome: ${{ steps.refresh.outcome }}
-      source_sha: ${{ steps.source.outputs.commit }}
+      source_sha: ${{ steps.source_sha.outputs.sha }}
     steps:
       - name: Checkout source
-        id: source
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event_name == 'push' && github.sha || github.event_name == 'workflow_dispatch' && inputs.source_ref || 'main' }}
           persist-credentials: false
+      - name: Record source commit
+        id: source_sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
@@ -77,6 +79,10 @@ jobs:
         with:
           ref: ${{ needs.generate.outputs.source_sha }}
           persist-credentials: false
+      - name: Verify publication source commit
+        env:
+          EXPECTED_SHA: ${{ needs.generate.outputs.source_sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
