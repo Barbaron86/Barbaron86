@@ -132,7 +132,7 @@
 </picture>
 </a>
 
-<br><br>
+<br>
 
 <a href="https://github.com/Barbaron86">
 <picture>
