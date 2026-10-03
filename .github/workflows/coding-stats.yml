@@ -4,15 +4,6 @@ on:
   schedule:
     - cron: "47 3 * * *"
   workflow_dispatch:
-    inputs:
-      source_ref:
-        description: "Reviewed source ref (main for normal refreshes)"
-        required: true
-        default: main
-        type: choice
-        options:
-          - main
-          - feat/coding-practice-cards
 
 permissions:
   contents: read
@@ -33,7 +24,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || 'main' }}
+          ref: main
           persist-credentials: false
       - name: Record source commit
         id: source_sha
