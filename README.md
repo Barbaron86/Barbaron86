@@ -14,7 +14,12 @@
 </div>
 
 ---
-### 🛡️ About Me
+<h3 align="left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/about-me-dark.svg" />
+    <img src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/about-me-light.svg" height="36" alt="About Me" />
+  </picture>
+</h3>
 
 * **Company:** **RWB (Wildberries & Russ)**
 * **Testing Philosophy:** **Shift-Left Quality** — reliable, isolated and deterministic tests with fast CI feedback loops.
@@ -22,7 +27,12 @@
 * **Code Design:** Building reusable and extensible test frameworks with OOP, separation of concerns, and SOLID principles.
 ---
 
-### 🛠️ Tech Stack & Tooling
+<h3 align="left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/tech-stack-dark.svg" />
+    <img src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/tech-stack-light.svg" height="36" alt="Tech Stack & Tooling" />
+  </picture>
+</h3>
 
 
 **Automation & Testing**
@@ -65,7 +75,12 @@
 
 ---
 
-### 📁 Featured Repositories
+<h3 align="left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/repositories-dark.svg" />
+    <img src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/repositories-light.svg" height="36" alt="Featured Repositories" />
+  </picture>
+</h3>
 
 | Project | Description | Tech Stack |
 | :--- | :--- | :--- |
@@ -74,7 +89,12 @@
 | [autotest-ui](https://github.com/Barbaron86/autotest-ui) | Web UI test automation framework with layered Page Object architecture, cross-browser parallel execution, reusable in-memory authentication state, Allure reporting, UI interaction coverage, and CI/CD with optional AI-assisted pull request review. | `Python 3.12` `Playwright` `Pytest` `pytest-xdist` `Pydantic` `Poetry` `Ruff` `Mypy` `Allure` `Loguru` |
 ---
 
-### 🧠 Coding Practice
+<h3 align="left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/coding-dark.svg" />
+    <img src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/coding-light.svg" height="36" alt="Coding Practice" />
+  </picture>
+</h3>
 
 <p align="center">
   <a href="https://leetcode.com/u/barbaron86/">
@@ -97,7 +117,12 @@
 
 <div align="center">
 
-### 📊 GitHub Activity
+<h3 align="left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/activity-dark.svg" />
+    <img src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/activity-light.svg" height="36" alt="GitHub Activity" />
+  </picture>
+</h3>
 
 <a href="https://github.com/Barbaron86">
 <picture>
@@ -107,7 +132,7 @@
 </picture>
 </a>
 
-<br>
+<br><br>
 
 <a href="https://github.com/Barbaron86">
 <picture>
