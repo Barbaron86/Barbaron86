@@ -1,10 +1,6 @@
 name: Refresh Coding Practice
 
 on:
-  # Publish the reviewed feature once before merge, without writing to main.
-  push:
-    branches: [feat/coding-practice-cards]
-    paths: [".github/workflows/coding-stats.yml"]
   schedule:
     - cron: "47 3 * * *"
   workflow_dispatch:
@@ -37,7 +33,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event_name == 'push' && github.sha || github.event_name == 'workflow_dispatch' && inputs.source_ref || 'main' }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || 'main' }}
           persist-credentials: false
       - name: Record source commit
         id: source_sha

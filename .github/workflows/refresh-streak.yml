@@ -1,10 +1,6 @@
 name: Refresh GitHub Streak
 
 on:
-  # Validate and publish this feature workflow before merging main.
-  push:
-    branches: [feat/coding-practice-cards]
-    paths: [".github/workflows/refresh-streak.yml"]
   schedule:
     - cron: "17 */3 * * *"
   workflow_dispatch:

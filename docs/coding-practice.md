@@ -21,10 +21,6 @@ uses the job-scoped `GITHUB_TOKEN`. After the PR is merged by the owner,
 GitHub may delay scheduled runs. It also supports **Run workflow**; use
 `source_ref: main` for normal updates. A reviewed feature ref is available
 for pre-merge validation when the workflow is registered on the default branch.
-The initial push of this workflow on `feat/coding-practice-cards` also
-publishes from that exact tested feature commit, enabling a real Actions
-validation before merging `main`. This narrowly scoped bootstrap trigger
-runs only when the publication workflow itself changes on that branch.
 
 The schedule always checks out `main`. Generation runs with read-only
 repository permissions; only the publication job has `contents: write`.
