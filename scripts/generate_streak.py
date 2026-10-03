@@ -23,8 +23,27 @@ MAX_RETRY_DELAY_SECONDS = 60
 RETRYABLE_HTTP_CODES = {429, 502, 503, 504}
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE_PATH = PROJECT_ROOT / "assets" / "streak-template.svg"
+TEMPLATE_PATH = PROJECT_ROOT / "assets" / "streak-glass-template.svg"
 OUTPUT_PATH = PROJECT_ROOT / "dist" / "streak.svg"
+
+THEMES = {
+    "dark": {
+        "BG_START": "#101e3b", "BG_END": "#24142f", "BORDER": "#6557ae",
+        "BLUE": "#4aa7ff", "PURPLE": "#bb83ff", "PINK": "#fa6cbd",
+        "GLASS": "#ffffff", "GLASS_OPACITY": "0.065",
+        "INNER_BORDER": "#514b86", "DIVIDER": "#ffffff",
+        "DIVIDER_OPACITY": "0.16", "PRIMARY": "#f6f8ff",
+        "MUTED": "#a8b5d6", "HIGHLIGHT": "#ffffff", "TRACK": "#273351",
+    },
+    "light": {
+        "BG_START": "#eef5ff", "BG_END": "#fbedfa", "BORDER": "#aeb8e2",
+        "BLUE": "#2473db", "PURPLE": "#8655c6", "PINK": "#e53d87",
+        "GLASS": "#ffffff", "GLASS_OPACITY": "0.7",
+        "INNER_BORDER": "#b2badd", "DIVIDER": "#6376aa",
+        "DIVIDER_OPACITY": "0.16", "PRIMARY": "#142542",
+        "MUTED": "#536682", "HIGHLIGHT": "#ffffff", "TRACK": "#cfdaed",
+    },
+}
 
 PLACEHOLDER_PATTERN = re.compile(r"\{\{[A-Z_]+\}\}")
 
@@ -55,6 +74,7 @@ class StreakStats:
     active_days: int
     best_day_date: date | None
     best_day_count: int
+    last_active: date | None
 
 
 def _retry_delay(attempt: int, retry_after: str | None = None) -> int:
@@ -352,6 +372,7 @@ def calculate_stats(contributions: ContributionMap, today: date) -> StreakStats:
         active_days=calculate_active_days(contributions, today.year),
         best_day_date=best_day_date,
         best_day_count=best_day_count,
+        last_active=max(_active_contributions(contributions), default=None),
     )
 
 
@@ -371,7 +392,7 @@ def format_period(period: StreakPeriod) -> str:
     return f"{format_date(period.start)} \u2014 {format_date(period.end)}"
 
 
-def render_svg(stats: StreakStats, username: str, current_year: int) -> str:
+def render_svg(stats: StreakStats, username: str, current_year: int, theme: str = "dark") -> str:
     """Render statistics into the SVG template."""
     if not TEMPLATE_PATH.exists():
         raise RuntimeError(f"SVG template not found: {TEMPLATE_PATH}")
@@ -391,7 +412,12 @@ def render_svg(stats: StreakStats, username: str, current_year: int) -> str:
         "{{ACTIVE_DAYS}}": str(stats.active_days),
         "{{BEST_DAY_COUNT}}": str(stats.best_day_count),
         "{{BEST_DAY_DATE}}": format_date(stats.best_day_date),
+        "{{LAST_ACTIVE}}": format_date(stats.last_active),
+        "{{STREAK_MESSAGE}}": "Every day counts" if stats.current.days else "Start a new streak",
+        "{{BAR_OPACITY}}": "1" if stats.current.days else "0",
     }
+
+    raw_replacements.update({f"{{{{{key}}}}}": value for key, value in THEMES[theme].items()})
 
     for placeholder, raw_value in raw_replacements.items():
         if placeholder not in template:
@@ -407,14 +433,14 @@ def render_svg(stats: StreakStats, username: str, current_year: int) -> str:
     return template
 
 
-def save_svg(svg: str) -> None:
+def save_svg(svg: str, filename: str = "streak.svg") -> None:
     """Write the generated SVG to the dist directory."""
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     if not svg.endswith("\n"):
         svg += "\n"
 
-    OUTPUT_PATH.write_text(svg, encoding="utf-8")
+    OUTPUT_PATH.with_name(filename).write_text(svg, encoding="utf-8")
 
 
 def configure_logging() -> None:
@@ -443,8 +469,11 @@ def main() -> None:
         raise RuntimeError("GitHub returned no contribution calendar data")
 
     stats = calculate_stats(contributions, today)
-    svg = render_svg(stats, username, today.year)
-    save_svg(svg)
+    dark = render_svg(stats, username, today.year, theme="dark")
+    light = render_svg(stats, username, today.year, theme="light")
+    save_svg(dark)
+    save_svg(dark, "streak-dark.svg")
+    save_svg(light, "streak-light.svg")
 
     logger.info(
         "Streak SVG generated successfully: %s\n"

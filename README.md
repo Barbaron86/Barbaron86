@@ -74,14 +74,42 @@
 | [autotest-ui](https://github.com/Barbaron86/autotest-ui) | Web UI test automation framework with layered Page Object architecture, cross-browser parallel execution, reusable in-memory authentication state, Allure reporting, UI interaction coverage, and CI/CD with optional AI-assisted pull request review. | `Python 3.12` `Playwright` `Pytest` `pytest-xdist` `Pydantic` `Poetry` `Ruff` `Mypy` `Allure` `Loguru` |
 ---
 
+### 🧠 Coding Practice
+
+<p align="center">
+  <a href="https://leetcode.com/u/barbaron86/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/leetcode-dark.svg" />
+      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/leetcode-light.svg" />
+      <img src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/leetcode-light.svg" alt="barbaron86's LeetCode problems solved by difficulty" width="400" />
+    </picture>
+  </a>
+  <a href="https://www.codewars.com/users/Barbaron86">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/codewars-dark.svg" />
+      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/codewars-light.svg" />
+      <img src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/codewars-light.svg" alt="Barbaron86's Codewars rank, kata, honor and Python rank" width="400" />
+    </picture>
+  </a>
+</p>
+
+---
+
 <div align="center">
 
 ### 📊 GitHub Activity
 
-![Kirill's GitHub Streak](https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak.svg)
+<a href="https://github.com/Barbaron86">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak-light.svg" />
+  <img alt="Barbaron86 GitHub contribution streak" src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak.svg" />
+</picture>
+</a>
 
 <br>
 
+<a href="https://github.com/Barbaron86">
 <picture>
   <source
     media="(prefers-color-scheme: dark)"
@@ -96,5 +124,6 @@
     src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake.svg"
   />
 </picture>
+</a>
 
 </div>

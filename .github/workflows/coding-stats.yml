@@ -1,0 +1,106 @@
+name: Refresh Coding Practice
+
+on:
+  schedule:
+    - cron: "47 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: profile-assets
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      has_assets: ${{ steps.refresh.outputs.has_assets }}
+      refresh_outcome: ${{ steps.refresh.outcome }}
+      source_sha: ${{ steps.source_sha.outputs.sha }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Record source commit
+        id: source_sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Validate Python syntax
+        run: python -m compileall -q scripts
+      - name: Generate cards independently
+        id: refresh
+        continue-on-error: true
+        env:
+          LEETCODE_USERNAME: ${{ vars.LEETCODE_USERNAME }}
+          CODEWARS_USERNAME: ${{ vars.CODEWARS_USERNAME }}
+        run: python scripts/update_coding_stats.py --output dist
+      - name: Upload valid cards
+        if: steps.refresh.outputs.has_assets == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: coding-practice-cards
+          path: |
+            dist/leetcode-*.svg
+            dist/codewars-*.svg
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: generate
+    if: needs.generate.outputs.has_assets == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout the tested source commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.generate.outputs.source_sha }}
+          persist-credentials: false
+      - name: Verify publication source commit
+        env:
+          EXPECTED_SHA: ${{ needs.generate.outputs.source_sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Download valid cards
+        uses: actions/download-artifact@v8
+        with:
+          name: coding-practice-cards
+          path: dist
+      - name: Publish onto latest output tree with bounded retries
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/publish_coding_stats.py --assets dist --repo .
+
+  report:
+    needs: [generate, publish]
+    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Reflect full or partial failure in workflow result
+        env:
+          GENERATE_RESULT: ${{ needs.generate.result }}
+          REFRESH_OUTCOME: ${{ needs.generate.outputs.refresh_outcome }}
+          PUBLISH_RESULT: ${{ needs.publish.result }}
+        run: |
+          if [ "$GENERATE_RESULT" != "success" ] || [ "$REFRESH_OUTCOME" != "success" ]; then
+            echo "::error::One or more platforms did not refresh. See the generation summary; last valid images were retained."
+            exit 1
+          fi
+          if [ "$PUBLISH_RESULT" != "success" ]; then
+            echo "::error::Coding card publication did not succeed."
+            exit 1
+          fi

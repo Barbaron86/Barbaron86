@@ -42,8 +42,11 @@ jobs:
           path: profile-output
           fetch-depth: 1
 
-      - name: Update streak asset
-        run: cp dist/streak.svg profile-output/streak.svg
+      - name: Update streak assets
+        run: |
+          cp dist/streak.svg profile-output/streak.svg
+          cp dist/streak-dark.svg profile-output/streak-dark.svg
+          cp dist/streak-light.svg profile-output/streak-light.svg
 
       - name: Publish streak asset
         working-directory: profile-output
@@ -51,11 +54,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          if [ -z "$(git status --porcelain -- streak.svg)" ]; then
+          if [ -z "$(git status --porcelain -- streak.svg streak-dark.svg streak-light.svg)" ]; then
             echo "Streak SVG is already up to date."
             exit 0
           fi
 
-          git add streak.svg
+          git add streak.svg streak-dark.svg streak-light.svg
           git commit -m "chore: refresh streak stats"
           git push
