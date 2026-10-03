@@ -1,6 +1,10 @@
 name: Generate Snake
 
 on:
+  # Validate and publish this feature workflow before merging main.
+  push:
+    branches: [feat/coding-practice-cards]
+    paths: [".github/workflows/snake.yml"]
   schedule:
     - cron: "17 3 * * *"
   workflow_dispatch:
