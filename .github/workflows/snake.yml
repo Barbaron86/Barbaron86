@@ -21,13 +21,26 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout profile repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
       - name: Generate snake
         uses: Platane/snk/svg-only@v3
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
-            dist/github-contribution-grid-snake.svg
-            dist/github-contribution-grid-snake-dark.svg?palette=github-dark
+            dist/github-contribution-grid-snake.svg?color_snake=%237b5fce&color_dots=%23edf2fc,%23d9e5fa,%23afc6f4,%236c98e8,%23765fc8
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark&color_snake=%23b493ff&color_dots=%231b233e,%23283662,%23355291,%233b80c9,%23836de1
+
+      - name: Add Liquid Glass styling
+        run: |
+          python scripts/glass_snake.py dist/github-contribution-grid-snake.svg dist/github-contribution-grid-snake.svg --theme light
+          python scripts/glass_snake.py dist/github-contribution-grid-snake-dark.svg dist/github-contribution-grid-snake-dark.svg --theme dark
 
       - name: Checkout output branch
         uses: actions/checkout@v7

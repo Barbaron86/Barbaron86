@@ -78,7 +78,11 @@
 
 ### 📊 GitHub Activity
 
-![Kirill's GitHub Streak](https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak-light.svg" />
+  <img alt="Barbaron86 GitHub contribution streak" src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak.svg" />
+</picture>
 
 <br>
 

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="940" height="258" viewBox="0 0 940 258" role="img" aria-labelledby="title description">
 <title id="title">{{USERNAME}} GitHub Streak</title>
-<desc id="description">Total contributions: {{TOTAL}} since {{FIRST_CONTRIBUTION}}. Current streak: {{CURRENT}} days. Longest streak: {{LONGEST}} days. Contributions {{CURRENT_YEAR}}: {{THIS_YEAR}}. Active days: {{ACTIVE_DAYS}}. Best day: {{BEST_DAY_COUNT}} on {{BEST_DAY_DATE}}.</desc>
+<desc id="description">Total contributions: {{TOTAL}} since {{FIRST_CONTRIBUTION}}. Current streak: {{CURRENT}} days. Longest streak: {{LONGEST}} days. Contributions {{CURRENT_YEAR}}: {{THIS_YEAR}}. Active days: {{ACTIVE_DAYS}}. Best day: {{BEST_DAY_COUNT}} on {{BEST_DAY_DATE}}. Last contribution: {{LAST_ACTIVE}}.</desc>
 <defs>
 <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="{{BG_START}}"/><stop offset="1" stop-color="{{BG_END}}"/></linearGradient>
 <linearGradient id="accent" x1="0" y1="1" x2="1" y2="0"><stop stop-color="{{BLUE}}"/><stop offset=".58" stop-color="{{PURPLE}}"/><stop offset="1" stop-color="{{PINK}}"/></linearGradient>
@@ -25,8 +25,8 @@
 <text x="144" y="151" text-anchor="middle" fill="{{PURPLE}}" font-size="14" font-weight="700">CURRENT STREAK · DAYS</text>
 <text x="144" y="174" text-anchor="middle" fill="{{MUTED}}" font-size="11">{{CURRENT_RANGE}}</text>
 <rect x="58" y="198" width="172" height="5" rx="2.5" fill="{{TRACK}}"/>
-<rect x="58" y="198" width="172" height="5" rx="2.5" fill="url(#accent)"/>
-<text x="36" y="230" fill="{{MUTED}}" font-size="10">Every day counts</text>
+<rect x="58" y="198" width="172" height="5" rx="2.5" fill="url(#accent)" fill-opacity="{{BAR_OPACITY}}"/>
+<text x="36" y="230" fill="{{MUTED}}" font-size="10">{{STREAK_MESSAGE}}</text>
 <text x="396" y="60" text-anchor="middle" fill="{{MUTED}}" font-size="11" letter-spacing=".7">TOTAL CONTRIBUTIONS</text>
 <text x="396" y="105" text-anchor="middle" fill="{{PRIMARY}}" font-size="34" font-weight="750">{{TOTAL}}</text>
 <text x="396" y="123" text-anchor="middle" fill="{{MUTED}}" font-size="10">Since {{FIRST_CONTRIBUTION}}</text>
@@ -42,7 +42,7 @@
 <text x="608" y="165" text-anchor="middle" fill="{{MUTED}}" font-size="11" letter-spacing=".7">BEST DAY</text>
 <text x="608" y="207" text-anchor="middle" fill="{{PINK}}" font-size="31" font-weight="700">{{BEST_DAY_COUNT}}</text>
 <text x="608" y="224" text-anchor="middle" fill="{{MUTED}}" font-size="10">{{BEST_DAY_DATE}}</text>
-<text x="820" y="165" text-anchor="middle" fill="{{MUTED}}" font-size="11" letter-spacing=".7">TRACKING SINCE</text>
-<text x="820" y="205" text-anchor="middle" fill="{{PRIMARY}}" font-size="17" font-weight="650">{{FIRST_CONTRIBUTION}}</text>
-<text x="820" y="224" text-anchor="middle" fill="{{MUTED}}" font-size="10">First contribution</text>
+<text x="820" y="165" text-anchor="middle" fill="{{MUTED}}" font-size="11" letter-spacing=".7">LAST ACTIVE</text>
+<text x="820" y="205" text-anchor="middle" fill="{{PRIMARY}}" font-size="17" font-weight="650">{{LAST_ACTIVE}}</text>
+<text x="820" y="224" text-anchor="middle" fill="{{MUTED}}" font-size="10">Most recent contribution</text>
 </g></svg>
