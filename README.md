@@ -126,6 +126,8 @@
 
 <a href="https://github.com/Barbaron86">
 <picture>
+  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak-mobile-dark.svg" />
+  <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak-mobile-light.svg" />
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak-light.svg" />
   <img alt="Barbaron86 GitHub contribution streak" src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/streak.svg" />
@@ -136,18 +138,11 @@
 
 <a href="https://github.com/Barbaron86">
 <picture>
-  <source
-    media="(prefers-color-scheme: dark)"
-    srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake-dark.svg"
-  />
-  <source
-    media="(prefers-color-scheme: light)"
-    srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake.svg"
-  />
-  <img
-    alt="GitHub contribution snake"
-    src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake.svg"
-  />
+  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake-mobile-dark.svg" />
+  <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake-mobile-light.svg" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake.svg" />
+  <img alt="GitHub contribution snake" src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/output/github-contribution-grid-snake.svg" />
 </picture>
 </a>
 
