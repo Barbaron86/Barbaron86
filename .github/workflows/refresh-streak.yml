@@ -33,7 +33,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USERNAME: ${{ github.repository_owner }}
-        run: python scripts/generate_streak.py
+        run: |
+          python scripts/generate_streak.py
+          python scripts/mobile_cards.py streak --input dist/streak-dark.svg --output dist/streak-mobile-dark.svg --theme dark
+          python scripts/mobile_cards.py streak --input dist/streak-light.svg --output dist/streak-mobile-light.svg --theme light
 
       - name: Checkout output branch
         uses: actions/checkout@v7
@@ -47,6 +50,8 @@ jobs:
           cp dist/streak.svg profile-output/streak.svg
           cp dist/streak-dark.svg profile-output/streak-dark.svg
           cp dist/streak-light.svg profile-output/streak-light.svg
+          cp dist/streak-mobile-dark.svg profile-output/streak-mobile-dark.svg
+          cp dist/streak-mobile-light.svg profile-output/streak-mobile-light.svg
 
       - name: Publish streak asset
         working-directory: profile-output
@@ -54,11 +59,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          if [ -z "$(git status --porcelain -- streak.svg streak-dark.svg streak-light.svg)" ]; then
+          if [ -z "$(git status --porcelain -- streak.svg streak-dark.svg streak-light.svg streak-mobile-dark.svg streak-mobile-light.svg)" ]; then
             echo "Streak SVG is already up to date."
             exit 0
           fi
 
-          git add streak.svg streak-dark.svg streak-light.svg
+          git add streak.svg streak-dark.svg streak-light.svg streak-mobile-dark.svg streak-mobile-light.svg
           git commit -m "chore: refresh streak stats"
           git push
