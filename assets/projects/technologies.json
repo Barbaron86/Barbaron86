@@ -16,5 +16,6 @@
   "Prometheus": "monitoring",
   "Grafana": "monitoring",
   "Ruff": "quality",
-  "Mypy": "quality"
+  "Mypy": "quality",
+  "Loguru": "monitoring"
 }

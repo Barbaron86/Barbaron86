@@ -318,12 +318,9 @@ def render_card(project: Project, mobile: bool) -> str:
 
 
 def footer_split(mobile: bool) -> float:
-    """Place the link boundary halfway through the gap between left-aligned buttons."""
+    """Use the same footer proportions on desktop and mobile to avoid image seams."""
     metrics = LAYOUTS['mobile' if mobile else 'desktop']
-    left = 20 if mobile else 132
-    source_width = 8 + 28 + text_width('Source code', 15) + 34
-    gap = 8 if mobile else 16
-    return metrics.padding + left + source_width + gap / 2
+    return metrics.board_width * .52
 
 
 def render_footer(project: Project, action: str, mobile: bool) -> str:
@@ -340,7 +337,7 @@ def render_footer(project: Project, action: str, mobile: bool) -> str:
         return result + '\n</svg>\n'
     source_x = (20 if mobile else 132) + 8
     source_width = 8 + 28 + text_width('Source code', 15) + 34
-    x = source_x if action == 'repository' else source_x + source_width + (8 if mobile else 16)
+    x = source_x if action == 'repository' else footer_split(mobile) - metrics.padding + (8 if mobile else 16) + 8
     y = top + 33
     icon_gap = 28 if action == 'repository' else 26
     trailing = 34 if action == 'repository' else 16
@@ -444,15 +441,14 @@ def render_readme() -> str:
     def link(url: str, stem: str, alternative: str, width: str = '100%', mobile_width: str | None = None) -> str:
         return f'<a href="{escape(url, quote=True)}">{picture(stem, alternative, width, mobile_width)}</a>'
 
-    source_widths = [footer_split(mobile) / LAYOUTS['mobile' if mobile else 'desktop'].board_width * 100
-                     for mobile in (False, True)]
+    source_widths = [52.0, 52.0]
     widths = [f'{w:.8f}%' for w in source_widths]
     remaining = [f'{100-w:.8f}%' for w in source_widths]
 
     caption = ('My Projects. A collection of QA automation and performance testing projects '
                'with real-world scenarios, modern tools and CI/CD. View all repositories.')
     rows = ['<p align="center">',
-            '  ' + link('https://github.com/Barbaron86?tab=repositories', 'header', caption) + '<br />']
+            '  ' + link('https://github.com/search?q=user%3ABarbaron86&type=repositories', 'header', caption) + '<br />']
     for index, project in enumerate(PROJECTS):
         repo = f'https://github.com/Barbaron86/{project.name}'
         alternative = project.name + ' — ' + project.category + '. '
