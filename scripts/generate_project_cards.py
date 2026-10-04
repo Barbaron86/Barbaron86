@@ -317,30 +317,36 @@ def render_card(project: Project, mobile: bool) -> str:
     return result + '\n</svg>\n'
 
 
+def footer_split(mobile: bool) -> float:
+    """Place the link boundary halfway through the gap between left-aligned buttons."""
+    metrics = LAYOUTS['mobile' if mobile else 'desktop']
+    left = 12 if mobile else 20
+    source_width = 8 + 28 + text_width('Source code', 15) + 34
+    gap = 8 if mobile else 16
+    return metrics.padding + left + source_width + gap / 2
+
+
 def render_footer(project: Project, action: str, mobile: bool) -> str:
-    """Two equal image slices make independent HTML links on one glass footer."""
+    """Independent HTML links share one left-aligned glass footer."""
     layout = 'mobile' if mobile else 'desktop'
     metrics = LAYOUTS[layout]
     width, height, top = metrics.card_width, metrics.card_height, metrics.body_height
-    half = width // 2
-    offset = 0 if action == 'repository' else half
     prefix = f'projects-{action}-{layout}'
     label = 'Source code' if action == 'repository' else project.secondary_label
     result = start_svg(prefix, width, height, label or 'Project footer',
                        f'Open {label} for {project.name}.' if label else 'Decorative footer surface.',
-                       viewport=(offset, top, half, height - top))
+                       viewport=(0, top, width, height - top))
     if label is None:
         return result + '\n</svg>\n'
-    x = (20 if mobile else 132) if action == 'repository' else offset + 12
+    source_x = 20 if mobile else 28
+    source_width = 8 + 28 + text_width('Source code', 15) + 34
+    x = source_x if action == 'repository' else source_x + source_width + (8 if mobile else 16)
     y = top + 33
     icon_gap = 28 if action == 'repository' else 26
     trailing = 34 if action == 'repository' else 16
-    size = fit_size(label, half - (x - offset) - icon_gap - trailing, 15, 12)
+    size = fit_size(label, width - x - icon_gap - trailing - 12, 15, 12)
     advance = text_width(label, size)
     button_width = 8 + icon_gap + advance + trailing
-    if action == 'repository':
-        # Place the source button next to the secondary action across the slice seam.
-        x = half - button_width + (4 if mobile else -4)
     result += (f'<rect x="{x-8:g}" y="{top+8}" width="{button_width:g}" height="38" rx="14" '
                f'fill="url(#{prefix}-glass)" stroke="#829cda" stroke-opacity=".6"/>')
     if action == 'repository':
@@ -376,7 +382,8 @@ def render_assets() -> dict[str, str]:
     assets = {}
     for layout, metrics in LAYOUTS.items():
         mobile = layout == 'mobile'
-        width, half = metrics.board_width, metrics.board_width // 2
+        width = metrics.board_width
+        split = footer_split(mobile)
         assets[f'header-{layout}.svg'] = board_slice(
             render_header(mobile), layout, (0, 0, width, metrics.header_height),
             (metrics.padding, metrics.padding), surface=False)
@@ -390,10 +397,11 @@ def render_assets() -> dict[str, str]:
             if index == len(PROJECTS) - 1:
                 footer_height += metrics.padding
             for action in ('repository', 'secondary'):
-                offset = 0 if action == 'repository' else half
+                offset = 0 if action == 'repository' else split
+                slice_width = split if action == 'repository' else width - split
                 assets[f'{project.slug}-{action}-{layout}.svg'] = board_slice(
                     render_footer(project, action, mobile), layout,
-                    (offset, y + metrics.body_height, half, footer_height), (metrics.padding, y))
+                    (offset, y + metrics.body_height, slice_width, footer_height), (metrics.padding, y))
     return assets
 
 
@@ -427,13 +435,19 @@ def render_header(mobile: bool) -> str:
 
 
 def render_readme() -> str:
-    def picture(stem: str, alternative: str, width: str = '100%') -> str:
-        return (f'<picture><source media="(max-width: 800px)" srcset="assets/projects/{stem}-mobile.svg" />'
+    def picture(stem: str, alternative: str, width: str = '100%', mobile_width: str | None = None) -> str:
+        source_width = f' width="{mobile_width}"' if mobile_width is not None else ''
+        return (f'<picture><source media="(max-width: 800px)" srcset="assets/projects/{stem}-mobile.svg"{source_width} />'
                    f'<img src="assets/projects/{stem}-desktop.svg" width="{width}" align="top" '
                    f'alt="{escape(alternative, quote=True)}" /></picture>')
 
-    def link(url: str, stem: str, alternative: str, width: str = '100%') -> str:
-        return f'<a href="{escape(url, quote=True)}">{picture(stem, alternative, width)}</a>'
+    def link(url: str, stem: str, alternative: str, width: str = '100%', mobile_width: str | None = None) -> str:
+        return f'<a href="{escape(url, quote=True)}">{picture(stem, alternative, width, mobile_width)}</a>'
+
+    source_widths = [footer_split(mobile) / LAYOUTS['mobile' if mobile else 'desktop'].board_width * 100
+                     for mobile in (False, True)]
+    widths = [f'{w:.8f}%' for w in source_widths]
+    remaining = [f'{100-w:.8f}%' for w in source_widths]
 
     caption = ('My Projects. A collection of QA automation and performance testing projects '
                'with real-world scenarios, modern tools and CI/CD. View all repositories.')
@@ -447,11 +461,11 @@ def render_readme() -> str:
         alternative += project.description + ' Technologies: ' + ', '.join(project.desktop) + '.'
         # An anchor without href keeps GitHub from adding an image-file link.
         rows.append('  <a>' + picture(project.slug, alternative) + '</a><br />')
-        footer = link(repo, project.slug + '-repository', 'Source code', '50%')
+        footer = link(repo, project.slug + '-repository', 'Source code', *widths)
         if project.secondary_url is not None:
-            footer += link(project.secondary_url, project.slug + '-secondary', project.secondary_label, '50%')
+            footer += link(project.secondary_url, project.slug + '-secondary', project.secondary_label, *remaining)
         else:
-            footer += '<a>' + picture(project.slug + '-secondary', '', '50%') + '</a>'
+            footer += '<a>' + picture(project.slug + '-secondary', '', *remaining) + '</a>'
         rows.append('  ' + footer + ('<br />' if index < len(PROJECTS) - 1 else ''))
     return '\n'.join(rows + ['</p>'])
 
