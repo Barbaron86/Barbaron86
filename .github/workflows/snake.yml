@@ -39,6 +39,8 @@ jobs:
 
       - name: Add Liquid Glass styling
         run: |
+          python scripts/mobile_cards.py snake --input dist/github-contribution-grid-snake.svg --output dist/github-contribution-grid-snake-mobile-light.svg --theme light
+          python scripts/mobile_cards.py snake --input dist/github-contribution-grid-snake-dark.svg --output dist/github-contribution-grid-snake-mobile-dark.svg --theme dark
           python scripts/glass_snake.py dist/github-contribution-grid-snake.svg dist/github-contribution-grid-snake.svg --theme light
           python scripts/glass_snake.py dist/github-contribution-grid-snake-dark.svg dist/github-contribution-grid-snake-dark.svg --theme dark
 
@@ -56,6 +58,10 @@ jobs:
 
           cp dist/github-contribution-grid-snake-dark.svg \
             profile-output/github-contribution-grid-snake-dark.svg
+          cp dist/github-contribution-grid-snake-mobile-dark.svg \
+            profile-output/github-contribution-grid-snake-mobile-dark.svg
+          cp dist/github-contribution-grid-snake-mobile-light.svg \
+            profile-output/github-contribution-grid-snake-mobile-light.svg
 
       - name: Publish snake assets
         working-directory: profile-output
@@ -65,14 +71,18 @@ jobs:
 
           if [ -z "$(git status --porcelain -- \
             github-contribution-grid-snake.svg \
-            github-contribution-grid-snake-dark.svg)" ]; then
+            github-contribution-grid-snake-dark.svg \
+            github-contribution-grid-snake-mobile-dark.svg \
+            github-contribution-grid-snake-mobile-light.svg)" ]; then
             echo "Snake assets are already up to date."
             exit 0
           fi
 
           git add \
             github-contribution-grid-snake.svg \
-            github-contribution-grid-snake-dark.svg
+            github-contribution-grid-snake-dark.svg \
+            github-contribution-grid-snake-mobile-dark.svg \
+            github-contribution-grid-snake-mobile-light.svg
 
           git commit -m "chore: refresh contribution snake"
           git push
