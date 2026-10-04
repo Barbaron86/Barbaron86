@@ -42,9 +42,9 @@ def load_projects(path: Path) -> tuple[Project, ...]:
                                 'mobile': tuple(row['mobile'])}) for row in entries)
     if len({p.slug for p in projects}) != len(projects):
         raise ValueError('Project slugs must be unique')
-    filenames = [f'header-{layout}.svg' for layout in ('desktop', 'mobile')]
+    filenames = [f'header-{layout}.svg' for layout in ('desktop', 'tablet', 'mobile')]
     for p in projects:
-        for layout in ('desktop', 'mobile'):
+        for layout in ('desktop', 'tablet', 'mobile'):
             filenames.extend((f'{p.slug}-{layout}.svg', f'{p.slug}-repository-{layout}.svg',
                               f'{p.slug}-secondary-{layout}.svg'))
     if len(set(filenames)) != len(filenames):
@@ -100,8 +100,14 @@ class Layout:
 
 LAYOUTS = {
     'desktop': Layout(900, 346, 292, 20, 178, 14),
+    'tablet': Layout(568, 414, 360, 16, 180, 12),
     'mobile': Layout(360, 398, 344, 16, 246, 12),
 }
+
+# The profile sidebar appears at 768px, reducing the README by about 288px.
+# A narrow README still needs the compact layout on a small portrait tablet.
+MOBILE_MEDIA = '(max-width: 480px), (min-width: 768px) and (max-width: 820px)'
+TABLET_MEDIA = '(max-width: 1180px)'
 
 # Stroke, text and translucent fill, shared by every tool in a category.
 CATEGORY_COLORS = {
@@ -115,7 +121,6 @@ CATEGORY_COLORS = {
 }
 NEUTRAL_COLORS = ('#647688', '#e0e9f7', '#29384c')
 FONT = 'Segoe UI,Arial,sans-serif'
-NS = '{http://www.w3.org/2000/svg}'
 
 
 def load_technology_categories(path: Path) -> dict[str, str]:
@@ -168,11 +173,8 @@ def text(value: str, x: float, y: float, size: float, color: str = '#e0e8f6',
             f'font-weight="{weight}" fill="{color}">{escape(value)}</text>')
 
 
-def start_svg(prefix: str, width: int, height: int, title: str, description: str,
-              viewport: tuple[int, int, int, int] | None = None) -> str:
-    # The body and two navigation images share one continuous glass surface.
-    vx, vy, vw, vh = viewport or (0, 0, width, height)
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{vw}" height="{vh}" viewBox="{vx} {vy} {vw} {vh}" role="img" aria-labelledby="{prefix}-title {prefix}-desc">
+def start_svg(prefix: str, width: int, height: int, title: str, description: str) -> str:
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="{prefix}-title {prefix}-desc">
 <title id="{prefix}-title">{escape(title)}</title>
 <desc id="{prefix}-desc">{escape(description)}</desc>
 <defs>
@@ -218,8 +220,8 @@ def icon(prefix: str, slug: str, x: int, y: int, size: int) -> str:
     return result + '</g>'
 
 
-def illustration(prefix: str, slug: str) -> str:
-    result = f'<g aria-hidden="true" transform="translate(653 20)"><rect width="226" height="266" rx="17" fill="url(#{prefix}-glass)" stroke="#7395da" stroke-opacity=".45"/><g clip-path="url(#{prefix}-art-clip)">'
+def illustration(prefix: str, slug: str, x: int = 653, y: int = 20, scale: float = 1) -> str:
+    result = f'<g aria-hidden="true" transform="translate({x} {y}) scale({scale:g})"><rect width="226" height="266" rx="17" fill="url(#{prefix}-glass)" stroke="#7395da" stroke-opacity=".45"/><g clip-path="url(#{prefix}-art-clip)">'
     result += f'<ellipse cx="226" cy="266" rx="210" ry="230" fill="url(#{prefix}-halo)" opacity=".8"/><ellipse cx="30" cy="0" rx="190" ry="190" fill="url(#{prefix}-purple)" opacity=".45"/>'
     if slug == 'api':
         result += '<g stroke="#4b80b9" stroke-width=".6" opacity=".3">'
@@ -254,21 +256,22 @@ def featured(x: int, y: int) -> str:
             + text('Featured', 26, 16.5, 12, '#f1f6ff', 600) + '</g>')
 
 
-def badges(prefix: str, technologies: tuple[str, ...], x: int, y: int, width: int, bottom: int) -> str:
+def badges(prefix: str, technologies: tuple[str, ...], x: int, y: int, width: int, bottom: int,
+           size: int = 15, height: int = 28, leading: int = 34) -> str:
     result = '<g aria-label="Technology stack">'
     current_x, current_y = float(x), y
     for technology in technologies:
-        pill_width = round(text_width(technology, 15) + 24)
+        pill_width = round(text_width(technology, size) + 24)
         if pill_width > width:
             raise ValueError(f'Technology pill does not fit: {technology}')
         if current_x + pill_width > x + width:
-            current_x, current_y = float(x), current_y + 34
-        if current_y + 28 > bottom:
+            current_x, current_y = float(x), current_y + leading
+        if current_y + height > bottom:
             raise ValueError('Technology stack exceeds the card; use fewer or shorter labels')
         stroke, color, fill = CATEGORY_COLORS.get(TECHNOLOGY_CATEGORIES.get(technology), NEUTRAL_COLORS)
-        result += f'<g transform="translate({current_x:g} {current_y})"><rect width="{pill_width}" height="28" rx="14" fill="{fill}" fill-opacity=".65" stroke="{stroke}"/><rect width="{pill_width}" height="28" rx="14" fill="url(#{prefix}-glass)"/>'
+        result += f'<g transform="translate({current_x:g} {current_y})"><rect width="{pill_width}" height="{height}" rx="{height/2:g}" fill="{fill}" fill-opacity=".65" stroke="{stroke}"/><rect width="{pill_width}" height="{height}" rx="{height/2:g}" fill="url(#{prefix}-glass)"/>'
         result += '<path d="M13 2H' + str(pill_width - 13) + '" stroke="#ffffff" stroke-opacity=".15"/>'
-        result += text(technology, 12, 19, 15, color) + '</g>'
+        result += text(technology, 12, (height + size) / 2 - 2.5, size, color) + '</g>'
         current_x += pill_width + 8
     return result + '</g>'
 
@@ -278,8 +281,8 @@ def repository_icon(x: int, y: int, size: int = 20) -> str:
     return f'''<g transform="translate({x} {y}) scale({size/24:g})" fill="#f0f5ff"><path d="M12 1a11 11 0 0 0-3.5 21.4c.5.1.7-.2.7-.5v-2c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.6 2.5 1.1 3 .8.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5a4 4 0 0 1 1-2.8c-.1-.3-.4-1.3.1-2.7 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.2 0C16.6 6.2 17.5 6.5 17.5 6.5c.5 1.4.2 2.4.1 2.7a4 4 0 0 1 1 2.8c0 3.8-2.4 4.7-4.7 5 .4.3.7.9.7 1.8v3.1c0 .3.2.6.7.5A11 11 0 0 0 12 1Z"/></g>'''
 
 
-def render_card(project: Project, mobile: bool) -> str:
-    layout = 'mobile' if mobile else 'desktop'
+def render_card(project: Project, layout: str) -> str:
+    mobile = layout == 'mobile'
     prefix = f'project-{project.slug}-{layout}'
     metrics = LAYOUTS[layout]
     width, height, body_height = metrics.card_width, metrics.card_height, metrics.body_height
@@ -287,8 +290,38 @@ def render_card(project: Project, mobile: bool) -> str:
     if mobile and len(technologies) > 7:
         raise ValueError('Mobile cards support at most seven technologies')
     result = start_svg(prefix, width, height, project.name + ' — ' + project.category,
-                       project.description + ' Technologies: ' + ', '.join(technologies) + '.',
-                       viewport=(0, 0, width, body_height))
+                       project.description + ' Technologies: ' + ', '.join(technologies) + '.')
+    if layout == 'tablet':
+        # SVG image media queries see the displayed image width. Keep typography
+        # and artwork restrained as this composition grows inside the README.
+        result += '''<style>.tablet-profile{display:none}.tablet-compact{display:inline}
+@media(min-width:560px){.tablet-compact{display:none}.tablet-medium{display:inline}}
+@media(min-width:700px){.tablet-medium{display:none}.tablet-wide{display:inline}}</style>'''
+        for profile, icon_size, title_size, description_size, badge_size in (
+                ('compact', 72, 27, 22, 18), ('medium', 64, 25, 20, 16),
+                ('wide', 56, 23, 17, 14)):
+            result += f'<g class="tablet-profile tablet-{profile}">'
+            result += icon(prefix, project.art, 20, 24, icon_size)
+            name_size = fit_size(project.name, 320 if project.featured else 440, title_size, 20)
+            result += text(project.name, 108, 53, name_size, '#f3f6ff', 650)
+            result += text(project.category, 108, 81, fit_size(project.category, 440, 17, 14), '#9ccaff')
+            if project.featured:
+                featured_x = 108 + text_width(project.name, name_size) + 14
+                result += f'<g transform="translate({featured_x:g} 32) scale(1.15)">' + featured(0, 0) + '</g>'
+            description_top = 104
+            # Align the art with the first line's visible cap height, rather
+            # than the alphabetic baseline or the font's extra ascent space.
+            description_y = description_top + round(description_size * .76)
+            result += illustration(prefix, project.art, 420, description_top, .5)
+            lines = wrap_text(project.description, 352, description_size)
+            if description_y + (len(lines) - 1) * 24 > 254:
+                raise ValueError(f'Description exceeds tablet layout: {project.name}')
+            for index, line in enumerate(lines):
+                result += text(line, 24, description_y + 24 * index, description_size)
+            result += badges(prefix, technologies, 24, 270, 520, body_height - 16,
+                             badge_size, 32, 40)
+            result += '</g>'
+        return result + render_footer(project, 'repository', layout) + render_footer(project, 'secondary', layout) + '\n</svg>\n'
     if mobile:
         result += icon(prefix, project.art, 20, 24, 58)
         name_size = fit_size(project.name, 171 if project.featured else 249, 20, 15)
@@ -306,7 +339,7 @@ def render_card(project: Project, mobile: bool) -> str:
         if project.featured:
             result += featured(423, 36)
         result += illustration(prefix, project.art)
-        description_x, description_y, available, size, leading = 132, 121, 498, 18, 25
+        description_x, description_y, available, size, leading = 132, 118, 498, 22, 24
         badge_x, badge_y, badge_width = 132, 210, 496
     lines = wrap_text(project.description, available, size)
     if description_y + (len(lines) - 1) * leading > badge_y - 16:
@@ -314,33 +347,31 @@ def render_card(project: Project, mobile: bool) -> str:
     for index, line in enumerate(lines):
         result += text(line, description_x, description_y + leading * index, size)
     result += badges(prefix, technologies, badge_x, badge_y, badge_width, body_height - 16)
-    return result + '\n</svg>\n'
+    return result + render_footer(project, 'repository', layout) + render_footer(project, 'secondary', layout) + '\n</svg>\n'
 
 
-def footer_split(mobile: bool) -> float:
-    """Place the link boundary halfway through the gap between left-aligned buttons."""
-    metrics = LAYOUTS['mobile' if mobile else 'desktop']
-    left = 20 if mobile else 132
-    source_width = 8 + 28 + text_width('Source code', 15) + 34
-    gap = 8 if mobile else 16
-    return metrics.padding + left + source_width + gap / 2
-
-
-def render_footer(project: Project, action: str, mobile: bool) -> str:
-    """Independent HTML links share one left-aligned glass footer."""
-    layout = 'mobile' if mobile else 'desktop'
+def footer_split(layout: str) -> int:
+    """Use a whole SVG pixel inside the button gap as the link boundary."""
     metrics = LAYOUTS[layout]
-    width, height, top = metrics.card_width, metrics.card_height, metrics.body_height
-    prefix = f'projects-{action}-{layout}'
-    label = 'Source code' if action == 'repository' else project.secondary_label
-    result = start_svg(prefix, width, height, label or 'Project footer',
-                       f'Open {label} for {project.name}.' if label else 'Decorative footer surface.',
-                       viewport=(0, top, width, height - top))
-    if label is None:
-        return result + '\n</svg>\n'
-    source_x = (20 if mobile else 132) + 8
+    left = {'mobile': 20, 'tablet': 24, 'desktop': 132}[layout]
     source_width = 8 + 28 + text_width('Source code', 15) + 34
-    x = source_x if action == 'repository' else source_x + source_width + (8 if mobile else 16)
+    gap = {'mobile': 8, 'tablet': 12, 'desktop': 16}[layout]
+    return round(metrics.padding + left + source_width + gap / 2)
+
+
+def render_footer(project: Project, action: str, layout: str) -> str:
+    """Draw an action on the card's existing surface, without another frame."""
+    metrics = LAYOUTS[layout]
+    width, top = metrics.card_width, metrics.body_height
+    prefix = f'project-{project.slug}-{layout}'
+    label = 'Source code' if action == 'repository' else project.secondary_label
+    if label is None:
+        return ''
+    result = f'<g aria-label="{escape(label, quote=True)}">'
+    source_x = {'mobile': 20, 'tablet': 24, 'desktop': 132}[layout] + 8
+    source_width = 8 + 28 + text_width('Source code', 15) + 34
+    gap = {'mobile': 8, 'tablet': 12, 'desktop': 16}[layout]
+    x = source_x if action == 'repository' else source_x + source_width + gap
     y = top + 33
     icon_gap = 28 if action == 'repository' else 26
     trailing = 34 if action == 'repository' else 16
@@ -357,42 +388,59 @@ def render_footer(project: Project, action: str, mobile: bool) -> str:
     else:
         result += f'<path d="M{x+3} {y-19}h10l5 5v18H{x+3}Zm10 0v5h5M{x+7} {y-9}h7M{x+7} {y-4}h7" fill="none" stroke="#d2e5ff" stroke-width="1.5" stroke-linejoin="round"/>'
         result += text(label, x + 26, y, size, '#d2e5ff')
-    return result + '\n</svg>\n'
+    return result + '</g>'
 
 
-def board_slice(source: str, layout: str, viewport: tuple[int, int, int, int],
-                position: tuple[int, int], surface: bool = True) -> str:
-    """Crop a linked region from a continuous outer dashboard surface."""
-    metrics = LAYOUTS[layout]
-    root = ET.fromstring(source)
-    title, description = root.findtext(NS + 'title'), root.findtext(NS + 'desc')
-    result = start_svg(f'projects-board-{layout}', metrics.board_width, metrics.board_height,
-                       title, description, viewport)
+def svg_content(source: str, surface: bool = True) -> str:
+    """Extract drawing commands when embedding an SVG in the shared scene."""
     content = source[source.index('<defs>'):source.rindex('</svg>')]
     if not surface:
         # The header belongs to the outer panel, without a second card frame.
         defs_end = content.index('</defs>') + len('</defs>')
         background_end = content.index('</g>', defs_end) + len('</g>')
         content = content[:defs_end] + content[background_end:]
-    x, y = position
-    return result + f'<g transform="translate({x} {y})">' + content + '</g>\n</svg>\n'
+    return content
+
+
+def render_board(layout: str) -> str:
+    """Draw every contour once, before making any independently linked crops."""
+    metrics = LAYOUTS[layout]
+    result = start_svg(f'projects-board-{layout}', metrics.board_width, metrics.board_height,
+                       'My Projects', 'QA automation and performance testing projects.')
+    result += f'<g transform="translate({metrics.padding} {metrics.padding})">' + svg_content(render_header(layout), surface=False) + '</g>'
+    for index, project in enumerate(PROJECTS):
+        y = metrics.header_height + index * (metrics.card_height + metrics.gap)
+        result += f'<g transform="translate({metrics.padding} {y})">' + svg_content(render_card(project, layout)) + '</g>'
+    return result + '\n</svg>\n'
+
+
+def board_slice(source: str, layout: str, viewport: tuple[int, int, int, int],
+                title: str, description: str) -> str:
+    """Crop the same scene; prevent per-image aspect-ratio letterboxing."""
+    x, y, width, height = viewport
+    prefix = f'projects-board-{layout}'
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="{x} {y} {width} {height}" preserveAspectRatio="none" role="img" '
+            f'aria-labelledby="{prefix}-title {prefix}-desc">\n'
+            f'<title id="{prefix}-title">{escape(title)}</title>\n'
+            f'<desc id="{prefix}-desc">{escape(description)}</desc>\n'
+            + svg_content(source) + '\n</svg>\n')
 
 
 def render_assets() -> dict[str, str]:
     assets = {}
     for layout, metrics in LAYOUTS.items():
-        mobile = layout == 'mobile'
         width = metrics.board_width
-        split = footer_split(mobile)
+        split = footer_split(layout)
+        board = render_board(layout)
         assets[f'header-{layout}.svg'] = board_slice(
-            render_header(mobile), layout, (0, 0, width, metrics.header_height),
-            (metrics.padding, metrics.padding), surface=False)
+            board, layout, (0, 0, width, metrics.header_height), 'My Projects', 'View all repositories.')
         for index, project in enumerate(PROJECTS):
             y = metrics.header_height + index * (metrics.card_height + metrics.gap)
             start = y - (metrics.gap if index else 0)
             assets[f'{project.slug}-{layout}.svg'] = board_slice(
-                render_card(project, mobile), layout,
-                (0, start, width, y + metrics.body_height - start), (metrics.padding, y))
+                board, layout, (0, start, width, y + metrics.body_height - start),
+                project.name + ' — ' + project.category, project.description)
             footer_height = metrics.card_height - metrics.body_height
             if index == len(PROJECTS) - 1:
                 footer_height += metrics.padding
@@ -400,25 +448,34 @@ def render_assets() -> dict[str, str]:
                 offset = 0 if action == 'repository' else split
                 slice_width = split if action == 'repository' else width - split
                 assets[f'{project.slug}-{action}-{layout}.svg'] = board_slice(
-                    render_footer(project, action, mobile), layout,
-                    (offset, y + metrics.body_height, slice_width, footer_height), (metrics.padding, y))
+                    board, layout, (offset, y + metrics.body_height, slice_width, footer_height),
+                    'Source code' if action == 'repository' else project.secondary_label or 'Project footer',
+                    f'Navigation for {project.name}.')
     return assets
 
 
-def render_header(mobile: bool) -> str:
-    width, height = (360, 218) if mobile else (900, 150)
-    prefix = 'projects-header-' + ('mobile' if mobile else 'desktop')
+def render_header(layout: str) -> str:
+    mobile = layout == 'mobile'
+    tablet = layout == 'tablet'
+    width = LAYOUTS[layout].card_width
+    height = {'mobile': 218, 'tablet': 152, 'desktop': 150}[layout]
+    prefix = 'projects-header-' + layout
     caption = 'A collection of QA automation and performance testing projects with real-world scenarios, modern tools and CI/CD.'
     result = start_svg(prefix, width, height, 'My Projects', caption + ' View all repositories.')
-    x, y, size = (20, 20, 48) if mobile else (24, 25, 58)
+    x, y, size = (20, 20, 48) if mobile or tablet else (24, 25, 58)
     result += f'<g aria-hidden="true" transform="translate({x} {y})"><rect width="{size}" height="{size}" rx="14" fill="url(#{prefix}-glass)" stroke="#8996c8"/>'
     for dx, dy in ((0, 0), (15, 0), (0, 15), (15, 15)):
         result += f'<rect x="{size/2-12+dx:g}" y="{size/2-12+dy:g}" width="10" height="10" rx="1.5" fill="none" stroke="#a9bcff" stroke-width="2"/>'
     result += '</g>'
-    result += (f'<text x="{84 if mobile else 100}" y="{54 if mobile else 66}" '
-               f'font-family="{FONT}" font-size="{29 if mobile else 36}" font-weight="700" '
+    result += (f'<text x="{84 if mobile or tablet else 100}" y="{54 if mobile or tablet else 66}" '
+               f'font-family="{FONT}" font-size="{29 if mobile or tablet else 36}" font-weight="700" '
                'fill="#f3f6ff">My <tspan fill="#82a8ff">Projects</tspan></text>')
-    if mobile:
+    if tablet:
+        lines = wrap_text(caption, 520, 16.5)
+        for index, line in enumerate(lines):
+            result += text(line, 20, 95 + 23 * index, 16.5, '#b2c2de')
+        button_x, button_y = 320, 25
+    elif mobile:
         lines = wrap_text(caption, 320, 14.5)
         for index, line in enumerate(lines):
             result += text(line, 20, 95 + 21 * index, 14.5, '#b2c2de')
@@ -435,19 +492,19 @@ def render_header(mobile: bool) -> str:
 
 
 def render_readme() -> str:
-    def picture(stem: str, alternative: str, width: str = '100%', mobile_width: str | None = None) -> str:
-        source_width = f' width="{mobile_width}"' if mobile_width is not None else ''
-        return (f'<picture><source media="(max-width: 800px)" srcset="assets/projects/{stem}-mobile.svg"{source_width} />'
-                   f'<img src="assets/projects/{stem}-desktop.svg" width="{width}" align="top" '
+    def picture(stem: str, alternative: str, widths: dict[str, str] | None = None) -> str:
+        widths = widths or dict.fromkeys(LAYOUTS, '100%')
+        return (f'<picture><source media="{MOBILE_MEDIA}" srcset="assets/projects/{stem}-mobile.svg" width="{widths["mobile"]}" />'
+                   f'<source media="{TABLET_MEDIA}" srcset="assets/projects/{stem}-tablet.svg" width="{widths["tablet"]}" />'
+                   f'<img src="assets/projects/{stem}-desktop.svg" width="{widths["desktop"]}" align="top" '
                    f'alt="{escape(alternative, quote=True)}" /></picture>')
 
-    def link(url: str, stem: str, alternative: str, width: str = '100%', mobile_width: str | None = None) -> str:
-        return f'<a href="{escape(url, quote=True)}">{picture(stem, alternative, width, mobile_width)}</a>'
+    def link(url: str, stem: str, alternative: str, widths: dict[str, str] | None = None) -> str:
+        return f'<a href="{escape(url, quote=True)}">{picture(stem, alternative, widths)}</a>'
 
-    source_widths = [footer_split(mobile) / LAYOUTS['mobile' if mobile else 'desktop'].board_width * 100
-                     for mobile in (False, True)]
-    widths = [f'{w:.8f}%' for w in source_widths]
-    remaining = [f'{100-w:.8f}%' for w in source_widths]
+    fractions = {layout: footer_split(layout) / metrics.board_width * 100 for layout, metrics in LAYOUTS.items()}
+    widths = {layout: f'{fraction:.8f}%' for layout, fraction in fractions.items()}
+    remaining = {layout: f'{100-fraction:.8f}%' for layout, fraction in fractions.items()}
 
     caption = ('My Projects. A collection of QA automation and performance testing projects '
                'with real-world scenarios, modern tools and CI/CD. View all repositories.')
@@ -461,11 +518,11 @@ def render_readme() -> str:
         alternative += project.description + ' Technologies: ' + ', '.join(project.desktop) + '.'
         # An anchor without href keeps GitHub from adding an image-file link.
         rows.append('  <a>' + picture(project.slug, alternative) + '</a><br />')
-        footer = link(repo, project.slug + '-repository', 'Source code', *widths)
+        footer = link(repo, project.slug + '-repository', 'Source code', widths)
         if project.secondary_url is not None:
-            footer += link(project.secondary_url, project.slug + '-secondary', project.secondary_label, *remaining)
+            footer += link(project.secondary_url, project.slug + '-secondary', project.secondary_label, remaining)
         else:
-            footer += '<a>' + picture(project.slug + '-secondary', '', *remaining) + '</a>'
+            footer += '<a>' + picture(project.slug + '-secondary', '', remaining) + '</a>'
         rows.append('  ' + footer + ('<br />' if index < len(PROJECTS) - 1 else ''))
     return '\n'.join(rows + ['</p>'])
 
