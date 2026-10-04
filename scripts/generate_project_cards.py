@@ -39,6 +39,13 @@ def load_projects(path: Path) -> tuple[Project, ...]:
                                 'mobile': tuple(row['mobile'])}) for row in entries)
     if len({p.slug for p in projects}) != len(projects):
         raise ValueError('Project slugs must be unique')
+    filenames = [f'header-{layout}.svg' for layout in ('desktop', 'mobile')]
+    for p in projects:
+        for layout in ('desktop', 'mobile'):
+            filenames.extend((f'{p.slug}-{layout}.svg', f'{p.slug}-repository-{layout}.svg',
+                              f'{p.slug}-documentation-{layout}.svg'))
+    if len(set(filenames)) != len(filenames):
+        raise ValueError('Project slugs cause generated filename collisions; choose a different slug')
     for p in projects:
         if not re.fullmatch(r'[a-z][a-z0-9-]*', p.slug):
             raise ValueError(f'Invalid asset slug: {p.slug}')
