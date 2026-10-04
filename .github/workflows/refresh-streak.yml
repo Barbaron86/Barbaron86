@@ -35,8 +35,6 @@ jobs:
           GITHUB_USERNAME: ${{ github.repository_owner }}
         run: |
           python scripts/generate_streak.py
-          python scripts/mobile_cards.py streak --input dist/streak-dark.svg --output dist/streak-mobile-dark.svg --theme dark
-          python scripts/mobile_cards.py streak --input dist/streak-light.svg --output dist/streak-mobile-light.svg --theme light
 
       - name: Checkout output branch
         uses: actions/checkout@v7

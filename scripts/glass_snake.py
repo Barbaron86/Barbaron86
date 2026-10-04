@@ -1,58 +1,95 @@
-"""Add a lightweight Liquid Glass panel to the animated Platane/snk SVG.
-
-Retain original snake animation and contribution geometry.
-"""
+"""Frame the complete Platane/snk animation without changing its geometry."""
 from __future__ import annotations
 
 import argparse
-import re
+from html import escape
 from pathlib import Path
+import re
 import xml.etree.ElementTree as ET
 
-THEMES = {
-    "dark": {"start": "#101c39", "end": "#1d122e", "border": "#6a64bd", "text": "#f0f6fc", "muted": "#a7badb", "glow": "#a855f7", "blue": "#258bff", "glass": "#f0f6fc"},
-    "light": {"start": "#edf5ff", "end": "#faeafa", "border": "#a5b7e2", "text": "#162644", "muted": "#54647e", "glow": "#ca68dc", "blue": "#3e8def", "glass": "#ffffff"},
-}
+from activity_cards import SVG_NS, glass_frame, validate_svg, write_svg
+
+SVG_START = re.compile(r"<svg\b[^>]*>")
 
 
-def wrap_snake(content: str, theme_name: str) -> str:
-    """Add background and headings, without modifying CSS keyframes."""
-    ET.fromstring(content)
-    if 'id="glass-snake-bg"' in content:
+def _animation_viewport(content: str, width: int, height: int, padding: int) -> str:
+    """Change only viewport placement; keep the source viewBox and body intact."""
+    def position(match: re.Match[str]) -> str:
+        tag = match.group()
+        attributes = {
+            "id": "snake-animation", "x": str(padding), "y": "44",
+            "width": str(width - 2 * padding), "height": str(height - 60),
+            "preserveAspectRatio": "xMidYMid meet",
+        }
+        for name, value in attributes.items():
+            pattern = rf'''(?<=\s){name}\s*=\s*(["']).*?\1'''
+            replacement = f'{name}="{value}"'
+            if re.search(pattern, tag):
+                tag = re.sub(pattern, lambda _: replacement, tag, count=1)
+            else:
+                tag = tag[:-1] + f" {replacement}>"
+        return tag
+
+    return SVG_START.sub(position, content, count=1)
+
+
+def wrap_snake(content: str, theme_name: str, *, mobile: bool = False) -> str:
+    """Give the annual grid its own card and uniformly fit the original animation."""
+    validate_svg(content)
+    root = ET.fromstring(content)
+    if (root.find('.//*[@id="snake-animation"]') is not None
+            or root.find('.//*[@id="glass-snake-bg"]') is not None
+            or root.get("id") == "snake-animation"):
         raise ValueError("Input is already glass-styled")
-    theme = THEMES[theme_name]
-    if not re.search(r"<svg\b[^>]*>", content):
-        raise ValueError("Expected snk SVG root")
-    if "</style>" not in content:
-        raise ValueError("Expected snk stylesheet; do not replace animations")
-    header = f'''<defs>
-  <linearGradient id="glass-snake-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="{theme['start']}"/><stop offset="1" stop-color="{theme['end']}"/></linearGradient>
-  <linearGradient id="glass-snake-mountain" x1="0" y1="0" x2="0" y2="1"><stop stop-color="{theme['blue']}" stop-opacity=".19"/><stop offset="1" stop-color="{theme['glow']}" stop-opacity=".015"/></linearGradient>
-  <clipPath id="glass-snake-clip"><rect x="-15" y="-55" width="878" height="232" rx="17"/></clipPath>
-</defs>'''
-    panel = f'''<g id="glass-snake-bg">
-<rect x="-15" y="-55" width="878" height="232" rx="17" fill="url(#glass-snake-gradient)" stroke="{theme['border']}" stroke-width="1.4"/>
-<g clip-path="url(#glass-snake-clip)">
-<path d="M-15 170 66 124 113 167 209 135 277 167 405 137 524 175 653 128 754 168 863 139V177H-15Z" fill="url(#glass-snake-mountain)"/>
-<path d="M-15-54H863" stroke="{theme['glass']}" stroke-opacity=".4"/>
+    stylesheet = root.find(f"{{{SVG_NS}}}style")
+    if stylesheet is None:
+        raise ValueError("Expected the snk stylesheet and contribution grid")
+    opening = SVG_START.search(content)
+    if opening is None:
+        raise ValueError("Expected an SVG root")
+
+    width, height = (600, 224) if mobile else (880, 235)
+    original_description = root.find(f"{{{SVG_NS}}}desc")
+    attribution = "" if original_description is None else "".join(original_description.itertext())
+    animation = _animation_viewport(content[opening.start():], width, height, 28 if mobile else 16)
+    # snk already defines each cell's initial contribution fill outside keyframes.
+    # Keep those rules; hide moving elements when motion is unavailable or reduced.
+    motion_supported = ""
+    if "@keyframes" in (stylesheet.text or ""):
+        motion_supported = '''@supports (animation-name: snk) {
+  #snake-animation .s, #snake-animation .u { visibility: visible; }
+}'''
+    rendered = f'''<svg xmlns="{SVG_NS}" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="snake-title snake-description">
+<title id="snake-title">GitHub contribution snake</title>
+<desc id="snake-description">Annual GitHub contribution grid. Color intensity represents contribution levels; the snake consumes active cells. The complete original animation is fitted uniformly without cropping. With reduced motion, the original activity grid remains visible. {escape(attribution)}</desc>
+{glass_frame(width, height, theme_name)}
+<g id="snake-light-arc" transform="translate({(width - 600) / 2:g} 0)" fill="none" stroke="url(#activity-accent)">
+  <path d="M105 33C185 15 213 44 294 29S404 16 495 32" stroke-width="2" stroke-opacity="{'.36' if theme_name == 'dark' else '.27'}"/>
+  <path d="M140 33C228 19 284 41 368 28S431 22 461 30" stroke-width="1" stroke-opacity=".15"/>
 </g>
-<text x="15" y="-35" fill="{theme['text']}" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="1">CONTRIBUTION SNAKE</text>
-<text x="850" y="-35" text-anchor="end" fill="{theme['muted']}" font-family="Segoe UI,Arial,sans-serif" font-size="11">GitHub activity</text>
-</g>'''
-    content = re.sub(r"<svg\b[^>]*>", lambda match: re.sub(r'viewBox="[^"]+"', 'viewBox="-16 -56 880 235"', re.sub(r'height="[^"]+"', 'height="235"', match.group(0))), content, count=1)
-    content = content.replace("</style>", "</style>" + header + panel, 1)
-    ET.fromstring(content)
-    return content if content.endswith("\n") else content + "\n"
+<style>
+#snake-animation .s, #snake-animation .u {{ visibility: hidden; }}
+{motion_supported}
+@media (prefers-reduced-motion: reduce) {{
+  #snake-animation .c, #snake-animation .s, #snake-animation .u {{ animation: none !important; }}
+  #snake-animation .s, #snake-animation .u {{ visibility: hidden; }}
+}}
+</style>
+{animation}
+</svg>
+'''
+    validate_svg(rendered)
+    return rendered
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--theme", choices=tuple(THEMES), required=True)
+    parser.add_argument("--theme", choices=("light", "dark"), required=True)
     args = parser.parse_args()
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(wrap_snake(args.input.read_text(encoding="utf-8"), args.theme), encoding="utf-8")
+    content = wrap_snake(args.input.read_text(encoding="utf-8"), args.theme)
+    write_svg(content, args.output)
 
 
 if __name__ == "__main__":
