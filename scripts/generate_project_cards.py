@@ -452,7 +452,7 @@ def render_readme() -> str:
     caption = ('My Projects. A collection of QA automation and performance testing projects '
                'with real-world scenarios, modern tools and CI/CD. View all repositories.')
     rows = ['<p align="center">',
-            '  ' + link('https://github.com/Barbaron86?tab=repositories', 'header', caption) + '<br />']
+            '  ' + link('https://github.com/search?q=user%3ABarbaron86&type=repositories', 'header', caption) + '<br />']
     for index, project in enumerate(PROJECTS):
         repo = f'https://github.com/Barbaron86/{project.name}'
         alternative = project.name + ' — ' + project.category + '. '

@@ -3,7 +3,7 @@
     "slug": "isolation",
     "name": "isolation-api-tests",
     "category": "Isolated API & Integration Testing",
-    "description": "An API testing framework with custom FastAPI mocks for service isolation. Tests real HTTP/gRPC interactions, Kafka events and PostgreSQL data.",
+    "description": "Isolated API testing with custom HTTP/gRPC mock servers, real service interactions, and validation of Kafka-driven operations and PostgreSQL data.",
     "desktop": [
       "Python",
       "Pytest",
@@ -33,7 +33,7 @@
     "slug": "performance",
     "name": "performance-tests",
     "category": "Performance & Load Testing",
-    "description": "A Locust-based load testing framework with decoupled HTTP/gRPC clients, automated test data seeding, Prometheus/Grafana monitoring and CI/CD reporting.",
+    "description": "Locust-based load testing with reusable HTTP/gRPC clients, automated data seeding, Prometheus/Grafana monitoring, and CI-generated reports.",
     "desktop": [
       "Python",
       "Locust",
@@ -55,23 +55,23 @@
     "featured": false,
     "art": "load",
     "secondary_label": "Load report",
-    "secondary_url": "https://barbaron86.github.io/performance-tests/30481711334/"
+    "secondary_url": "https://barbaron86.github.io/performance-tests/latest/"
   },
   {
     "slug": "ui",
     "name": "autotest-ui",
     "category": "UI Test Automation",
-    "description": "A Playwright-based UI testing framework with Page Object architecture, parallel cross-browser execution, reusable authentication state, Allure reporting and CI/CD.",
+    "description": "Playwright UI automation with layered Page Object architecture, parallel cross-browser runs, in-memory authentication state, Allure reporting, and CI/CD.",
     "desktop": [
       "Python",
       "Playwright",
       "Pytest",
       "pytest-xdist",
-      "Pydantic",
       "Poetry",
       "Allure",
       "Ruff",
-      "Mypy"
+      "Mypy",
+      "Loguru"
     ],
     "mobile": [
       "Python",
@@ -80,7 +80,7 @@
       "pytest-xdist",
       "Allure",
       "Ruff",
-      "Mypy"
+      "Loguru"
     ],
     "featured": false,
     "art": "ui",
