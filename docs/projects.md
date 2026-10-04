@@ -45,7 +45,7 @@ Project content and illustrations are decorative; the two footer buttons provide
 
 Current resources are the API architecture diagram, an example Locust report, and the UI project's Allure report. The Locust link identifies a particular example run; update its URL to feature a different run. The UI report's `/main/` entry redirects to its published report.
 
-Every layout keeps two equal footer slices to preserve the shared outer panel. When a project has no secondary action, the right slice displays only the background and has no link. Body images use anchors without `href` to suppress GitHub's automatic links to image files.
+Every layout uses two footer slices with a boundary inside the gap between the buttons aligned with the first technology badge. Responsive image widths match each layout's slice proportions and preserve the shared outer panel. When a project has no secondary action, the right slice displays only the background and has no link. Body images use anchors without `href` to suppress GitHub's automatic links to image files.
 
 ## Technology categories
 
