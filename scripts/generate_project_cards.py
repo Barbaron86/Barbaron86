@@ -1,15 +1,22 @@
 """Generate the static Liquid Glass project cards with Python's standard library.
 
 Run: python scripts/generate_project_cards.py
-Edit PROJECTS to update copy or stacks, then commit the regenerated assets.
+Edit assets/projects/projects.json, run this command, then commit the data, SVGs and README.
 """
 from __future__ import annotations
 
 import argparse
+import json
+import re
 from dataclasses import dataclass
 from html import escape
 from pathlib import Path
 import xml.etree.ElementTree as ET
+
+
+ROOT = Path(__file__).resolve().parents[1]
+BEGIN = '<!-- BEGIN MY PROJECTS -->'
+END = '<!-- END MY PROJECTS -->'
 
 
 @dataclass(frozen=True)
@@ -21,32 +28,36 @@ class Project:
     desktop: tuple[str, ...]
     mobile: tuple[str, ...]
     featured: bool = False
+    art: str = 'ui'
 
 
-PROJECTS = (
-    Project(
-        'isolation', 'isolation-api-tests', 'Isolated API & Integration Testing',
-        'An API testing framework with custom FastAPI mocks for service isolation. '
-        'Tests real HTTP/gRPC interactions, Kafka events and PostgreSQL data.',
-        ('Python', 'Pytest', 'FastAPI', 'HTTPX', 'gRPC', 'Kafka', 'PostgreSQL', 'Docker', 'Allure'),
-        ('Python', 'Pytest', 'FastAPI', 'gRPC', 'Kafka', 'PostgreSQL', 'Docker'),
-        featured=True,
-    ),
-    Project(
-        'performance', 'performance-tests', 'Performance & Load Testing',
-        'A Locust-based load testing framework with decoupled HTTP/gRPC clients, '
-        'automated test data seeding, Prometheus/Grafana monitoring and CI/CD reporting.',
-        ('Python', 'Locust', 'gRPC', 'HTTPX', 'Docker', 'Prometheus', 'Grafana'),
-        ('Python', 'Locust', 'gRPC', 'HTTPX', 'Docker', 'Prometheus', 'Grafana'),
-    ),
-    Project(
-        'ui', 'autotest-ui', 'UI Test Automation',
-        'A Playwright-based UI testing framework with Page Object architecture, '
-        'parallel cross-browser execution, reusable authentication state, Allure reporting and CI/CD.',
-        ('Python', 'Playwright', 'Pytest', 'pytest-xdist', 'Pydantic', 'Poetry', 'Allure', 'Ruff', 'Mypy'),
-        ('Python', 'Playwright', 'Pytest', 'pytest-xdist', 'Allure', 'Ruff', 'Mypy'),
-    ),
-)
+def load_projects(path: Path) -> tuple[Project, ...]:
+    entries = json.loads(path.read_text(encoding='utf-8'))
+    if not isinstance(entries, list) or not entries:
+        raise ValueError('projects.json must contain a nonempty list')
+    projects = tuple(Project(**{**row, 'desktop': tuple(row['desktop']),
+                                'mobile': tuple(row['mobile'])}) for row in entries)
+    if len({p.slug for p in projects}) != len(projects):
+        raise ValueError('Project slugs must be unique')
+    for p in projects:
+        if not re.fullmatch(r'[a-z][a-z0-9-]*', p.slug):
+            raise ValueError(f'Invalid asset slug: {p.slug}')
+        if not re.fullmatch(r'[A-Za-z0-9_.-]+', p.name):
+            raise ValueError(f'Invalid GitHub repository name: {p.name}')
+        if not p.category or not p.description or not p.desktop or not p.mobile:
+            raise ValueError(f'Missing project content: {p.name}')
+        if len(p.mobile) > 7 or not set(p.mobile).issubset(p.desktop):
+            raise ValueError(f'Mobile stack must contain at most seven desktop technologies: {p.name}')
+        if any(not isinstance(label, str) or not label for label in p.desktop):
+            raise ValueError(f'Invalid technology label: {p.name}')
+        if p.art not in ('api', 'load', 'ui') or not isinstance(p.featured, bool):
+            raise ValueError(f'Invalid art or featured value: {p.name}')
+    if sum(p.featured for p in projects) > 1:
+        raise ValueError('Only one project may be featured')
+    return projects
+
+
+PROJECTS = load_projects(ROOT / 'assets' / 'projects' / 'projects.json')
 
 
 @dataclass(frozen=True)
@@ -101,6 +112,13 @@ def text_width(value: str, size: float) -> float:
     """Conservative system-font advance estimate for deterministic wrapping."""
     narrow, wide = "ilIjtfr.,:;!|' ", 'MWmw@%&'
     return sum(.31 if c in narrow else .86 if c in wide else .60 for c in value) * size
+
+
+def fit_size(value: str, width: float, preferred: float, minimum: float) -> float:
+    size = min(preferred, width / text_width(value, 1))
+    if size < minimum:
+        raise ValueError(f'Heading is too long; shorten it: {value}')
+    return size
 
 
 def wrap_text(value: str, width: float, size: float) -> list[str]:
@@ -163,9 +181,9 @@ def cube(prefix: str, x: float, y: float, scale: float = 1, opacity: float = 1) 
 
 def icon(prefix: str, slug: str, x: int, y: int, size: int) -> str:
     result = f'<g aria-hidden="true" transform="translate({x} {y}) scale({size/80:g})"><rect x="1" y="1" width="78" height="78" rx="18" fill="url(#{prefix}-glass)" stroke="#8298d6"/><ellipse cx="40" cy="44" rx="32" ry="30" fill="url(#{prefix}-halo)"/>'
-    if slug == 'isolation':
+    if slug == 'api':
         result += f'<g filter="url(#{prefix}-glow)">{cube(prefix, 20, 18, .5)}</g>' + cube(prefix, 20, 18, .5)
-    elif slug == 'performance':
+    elif slug == 'load':
         result += f'''<path d="M17 60A29 29 0 1 1 63 60" fill="none" stroke="url(#{prefix}-blue)" stroke-width="4"/>
 <path d="M20 48 25 46M23 29 28 32M40 20V26M57 29 52 32M60 48 55 46" stroke="#a3c7ff" stroke-width="3" stroke-linecap="round"/>
 <path d="M40 47 54 31" stroke="#7eaaff" stroke-width="4" stroke-linecap="round"/><circle cx="40" cy="47" r="5" fill="#9ac9ff"/>'''
@@ -179,7 +197,7 @@ def icon(prefix: str, slug: str, x: int, y: int, size: int) -> str:
 def illustration(prefix: str, slug: str) -> str:
     result = f'<g aria-hidden="true" transform="translate(653 20)"><rect width="226" height="266" rx="17" fill="url(#{prefix}-glass)" stroke="#7395da" stroke-opacity=".45"/><g clip-path="url(#{prefix}-art-clip)">'
     result += f'<ellipse cx="226" cy="266" rx="210" ry="230" fill="url(#{prefix}-halo)" opacity=".8"/><ellipse cx="30" cy="0" rx="190" ry="190" fill="url(#{prefix}-purple)" opacity=".45"/>'
-    if slug == 'isolation':
+    if slug == 'api':
         result += '<g stroke="#4b80b9" stroke-width=".6" opacity=".3">'
         for offset in range(-80, 200, 35):
             result += f'<path d="M{offset} 150 226 {263-offset/2:g}M0 {130+offset/2:g} 226 {17+offset/2:g}"/>'
@@ -188,7 +206,7 @@ def illustration(prefix: str, slug: str) -> str:
         result += f'<g opacity=".7" filter="url(#{prefix}-glow)">{cube(prefix, 60, 60, 1.3)}</g>'
         for y, opacity in [(124, .32), (92, .55), (60, 1)]:
             result += cube(prefix, 60, y, 1.3, opacity)
-    elif slug == 'performance':
+    elif slug == 'load':
         result += '<g stroke="#6c7ad9" stroke-dasharray="2 5" opacity=".35">'
         for x in (35, 82, 130, 177):
             result += f'<path d="M{x} 40V226"/>'
@@ -213,7 +231,7 @@ def featured(x: int, y: int) -> str:
             + text('Featured', 26, 16.5, 12, '#f1f6ff', 600) + '</g>')
 
 
-def badges(prefix: str, technologies: tuple[str, ...], x: int, y: int, width: int) -> str:
+def badges(prefix: str, technologies: tuple[str, ...], x: int, y: int, width: int, bottom: int) -> str:
     result = '<g aria-label="Technology stack">'
     current_x, current_y = float(x), y
     for technology in technologies:
@@ -222,7 +240,9 @@ def badges(prefix: str, technologies: tuple[str, ...], x: int, y: int, width: in
             raise ValueError(f'Technology pill does not fit: {technology}')
         if current_x + pill_width > x + width:
             current_x, current_y = float(x), current_y + 34
-        stroke, color, fill = COLORS[technology]
+        if current_y + 28 > bottom:
+            raise ValueError('Technology stack exceeds the card; use fewer or shorter labels')
+        stroke, color, fill = COLORS.get(technology, COLORS['HTTPX'])
         result += f'<g transform="translate({current_x:g} {current_y})"><rect width="{pill_width}" height="28" rx="14" fill="{fill}" fill-opacity=".65" stroke="{stroke}"/><rect width="{pill_width}" height="28" rx="14" fill="url(#{prefix}-glass)"/>'
         result += '<path d="M13 2H' + str(pill_width - 13) + '" stroke="#ffffff" stroke-opacity=".15"/>'
         result += text(technology, 12, 19, 15, color) + '</g>'
@@ -247,20 +267,22 @@ def render_card(project: Project, mobile: bool) -> str:
                        project.description + ' Technologies: ' + ', '.join(technologies) + '. Open the project repository.',
                        viewport=(0, 0, width, body_height))
     if mobile:
-        result += icon(prefix, project.slug, 20, 24, 58)
-        result += text(project.name, 91, 45, 20, '#f3f6ff', 650)
-        result += text(project.category, 91, 68, 13, '#9ccaff')
+        result += icon(prefix, project.art, 20, 24, 58)
+        name_size = fit_size(project.name, 171 if project.featured else 249, 20, 15)
+        result += text(project.name, 91, 45, name_size, '#f3f6ff', 650)
+        result += text(project.category, 91, 68, fit_size(project.category, 249, 13, 11), '#9ccaff')
         if project.featured:
             result += '<g transform="translate(272 28) scale(.73)">' + featured(0, 0) + '</g>'
         description_x, description_y, available, size, leading = 20, 105, 320, 17, 23
         badge_x, badge_y, badge_width = 20, 228, 320
     else:
-        result += icon(prefix, project.slug, 24, 28, 80)
-        result += text(project.name, 132, 57, 28, '#f3f6ff', 650)
-        result += text(project.category, 132, 85, 18, '#9ccaff')
+        result += icon(prefix, project.art, 24, 28, 80)
+        name_size = fit_size(project.name, 281 if project.featured else 498, 28, 20)
+        result += text(project.name, 132, 57, name_size, '#f3f6ff', 650)
+        result += text(project.category, 132, 85, fit_size(project.category, 498, 18, 14), '#9ccaff')
         if project.featured:
             result += featured(423, 36)
-        result += illustration(prefix, project.slug)
+        result += illustration(prefix, project.art)
         description_x, description_y, available, size, leading = 132, 121, 498, 18, 25
         badge_x, badge_y, badge_width = 132, 210, 496
     lines = wrap_text(project.description, available, size)
@@ -268,7 +290,7 @@ def render_card(project: Project, mobile: bool) -> str:
         raise ValueError(f'Description exceeds {layout} layout: {project.name}')
     for index, line in enumerate(lines):
         result += text(line, description_x, description_y + leading * index, size)
-    result += badges(prefix, technologies, badge_x, badge_y, badge_width)
+    result += badges(prefix, technologies, badge_x, badge_y, badge_width, body_height - 16)
     return result + '\n</svg>\n'
 
 
@@ -368,8 +390,40 @@ def render_header(mobile: bool) -> str:
     return result + '\n</svg>\n'
 
 
-def generate(output: Path) -> None:
+def render_readme() -> str:
+    def link(url: str, stem: str, alternative: str, width: str = '100%') -> str:
+        picture = (f'<picture><source media="(max-width: 800px)" srcset="assets/projects/{stem}-mobile.svg" />'
+                   f'<img src="assets/projects/{stem}-desktop.svg" width="{width}" align="top" '
+                   f'alt="{escape(alternative, quote=True)}" /></picture>')
+        return f'<a href="{url}">{picture}</a>'
+
+    caption = ('My Projects. A collection of QA automation and performance testing projects '
+               'with real-world scenarios, modern tools and CI/CD. View all repositories.')
+    rows = ['<p align="center">',
+            '  ' + link('https://github.com/Barbaron86?tab=repositories', 'header', caption) + '<br />']
+    for index, project in enumerate(PROJECTS):
+        repo = f'https://github.com/Barbaron86/{project.name}'
+        alternative = project.name + ' — ' + project.category + '. '
+        if project.featured:
+            alternative += 'Featured project. '
+        alternative += project.description + ' Technologies: ' + ', '.join(project.desktop) + '. Open repository.'
+        rows.append('  ' + link(repo, project.slug, alternative) + '<br />')
+        footer = (link(repo, project.slug + '-repository', 'Repository', '50%')
+                  + link(repo + '/blob/main/README.md', project.slug + '-documentation', 'Documentation', '50%'))
+        rows.append('  ' + footer + ('<br />' if index < len(PROJECTS) - 1 else ''))
+    return '\n'.join(rows + ['</p>'])
+
+
+def generate(output: Path, readme: Path | None = None) -> None:
     assets = render_assets()
+    updated_readme = None
+    if readme is not None:
+        current = readme.read_text(encoding='utf-8')
+        if current.count(BEGIN) != 1 or current.count(END) != 1:
+            raise ValueError('README must contain one pair of MY PROJECTS markers')
+        before, remainder = current.split(BEGIN, 1)
+        _, after = remainder.split(END, 1)
+        updated_readme = before + BEGIN + '\n' + render_readme() + '\n' + END + after
     # Validate every image before replacing any generated assets.
     for value in assets.values():
         ET.fromstring(value)
@@ -378,13 +432,18 @@ def generate(output: Path) -> None:
         path = output / filename
         if not path.exists() or path.read_text(encoding='utf-8') != value:
             path.write_text(value, encoding='utf-8', newline='\n')
+    if updated_readme is not None and updated_readme != current:
+        readme.write_text(updated_readme, encoding='utf-8', newline='\n')
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).resolve().parents[1] / 'assets' / 'projects')
+    parser.add_argument('--output', type=Path, help='SVG output directory; skips README unless --readme is set')
+    parser.add_argument('--readme', type=Path, help='README containing MY PROJECTS markers')
     args = parser.parse_args()
-    generate(args.output)
+    output = args.output or ROOT / 'assets' / 'projects'
+    readme = args.readme or (ROOT / 'README.md' if args.output is None else None)
+    generate(output, readme)
 
 
 if __name__ == '__main__':
