@@ -102,31 +102,37 @@ def text(value: str, x: float, y: float, size: float, color: str = '#e0e8f6',
             f'font-weight="{weight}" fill="{color}">{escape(value)}</text>')
 
 
-def start_svg(prefix: str, width: int, height: int, title: str, description: str) -> str:
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="{prefix}-title {prefix}-desc">
+def start_svg(prefix: str, width: int, height: int, title: str, description: str,
+              viewport: tuple[int, int, int, int] | None = None) -> str:
+    # The body and two navigation images share one continuous glass surface.
+    vx, vy, vw, vh = viewport or (0, 0, width, height)
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{vw}" height="{vh}" viewBox="{vx} {vy} {vw} {vh}" role="img" aria-labelledby="{prefix}-title {prefix}-desc">
 <title id="{prefix}-title">{escape(title)}</title>
 <desc id="{prefix}-desc">{escape(description)}</desc>
 <defs>
-  <linearGradient id="{prefix}-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18233c"/><stop offset=".5" stop-color="#091827"/><stop offset="1" stop-color="#212248"/></linearGradient>
-  <linearGradient id="{prefix}-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ada1de"/><stop offset=".48" stop-color="#426c96"/><stop offset="1" stop-color="#8f9ff1"/></linearGradient>
-  <linearGradient id="{prefix}-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d2ddff" stop-opacity=".25"/><stop offset=".5" stop-color="#7293ee" stop-opacity=".09"/><stop offset="1" stop-color="#5969b9" stop-opacity=".23"/></linearGradient>
+  <linearGradient id="{prefix}-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18283e"/><stop offset=".45" stop-color="#091723"/><stop offset="1" stop-color="#162347"/></linearGradient>
+  <linearGradient id="{prefix}-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#cabfff"/><stop offset=".35" stop-color="#5387bd"/><stop offset=".75" stop-color="#809fef"/><stop offset="1" stop-color="#d3ceff"/></linearGradient>
+  <linearGradient id="{prefix}-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7e4ff" stop-opacity=".42"/><stop offset=".3" stop-color="#839bfc" stop-opacity=".13"/><stop offset=".7" stop-color="#608bd0" stop-opacity=".06"/><stop offset="1" stop-color="#9797ff" stop-opacity=".30"/></linearGradient>
   <linearGradient id="{prefix}-blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a4eeff"/><stop offset=".5" stop-color="#54abff"/><stop offset="1" stop-color="#8079ff"/></linearGradient>
   <linearGradient id="{prefix}-violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8facff"/><stop offset=".55" stop-color="#7962d9"/><stop offset="1" stop-color="#342955"/></linearGradient>
-  <radialGradient id="{prefix}-halo"><stop stop-color="#548cf8" stop-opacity=".4"/><stop offset="1" stop-color="#4a77ec" stop-opacity="0"/></radialGradient>
+  <radialGradient id="{prefix}-halo"><stop stop-color="#54baff" stop-opacity=".9"/><stop offset=".38" stop-color="#4785f2" stop-opacity=".48"/><stop offset="1" stop-color="#527aff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="{prefix}-purple"><stop stop-color="#ac86ff" stop-opacity=".7"/><stop offset=".45" stop-color="#7958d9" stop-opacity=".32"/><stop offset="1" stop-color="#634ec3" stop-opacity="0"/></radialGradient>
+  <linearGradient id="{prefix}-wave" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b7a5ff" stop-opacity=".9"/><stop offset=".35" stop-color="#8461f0" stop-opacity=".55"/><stop offset="1" stop-color="#5758cb" stop-opacity=".02"/></linearGradient>
   <filter id="{prefix}-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
   <clipPath id="{prefix}-clip"><rect x="1" y="1" width="{width-2}" height="{height-2}" rx="22"/></clipPath>
   <clipPath id="{prefix}-art-clip"><rect width="226" height="266" rx="17"/></clipPath>
 </defs>
 <rect x="1" y="1" width="{width-2}" height="{height-2}" rx="22" fill="url(#{prefix}-bg)" stroke="url(#{prefix}-edge)"/>
-<g aria-hidden="true" clip-path="url(#{prefix}-clip)"><ellipse cx="{width}" cy="{height}" rx="230" ry="185" fill="url(#{prefix}-halo)"/><path d="M24 2H{width-24}" stroke="#e0e8ff" stroke-opacity=".16"/><ellipse cx="0" cy="0" rx="150" ry="130" fill="#a478df" opacity=".055"/></g>
+<g aria-hidden="true" clip-path="url(#{prefix}-clip)"><ellipse cx="{width}" cy="{height*.76:g}" rx="{width*.42:g}" ry="{height*.85:g}" fill="url(#{prefix}-halo)" opacity=".65"/><ellipse cx="0" cy="{height}" rx="{width*.32:g}" ry="{height*.86:g}" fill="url(#{prefix}-purple)" opacity=".65"/><ellipse cx="{width*.72:g}" cy="0" rx="{width*.3:g}" ry="{height*.8:g}" fill="url(#{prefix}-purple)" opacity=".32"/><path d="M24 2H{width-24}" stroke="#f0efff" stroke-opacity=".44"/><path d="M8 24Q8 8 24 8H{width*.45:g}" fill="none" stroke="#c4d8ff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round" filter="url(#{prefix}-glow)"/></g>
 '''
 
 
 def cube(prefix: str, x: float, y: float, scale: float = 1, opacity: float = 1) -> str:
     return f'''<g transform="translate({x:g} {y:g}) scale({scale:g})" opacity="{opacity:g}" stroke="#b7d9ff" stroke-width="1.3" stroke-linejoin="round">
-<path d="M0 24 40 0 80 24 40 48Z" fill="url(#{prefix}-blue)" fill-opacity=".48"/>
-<path d="M0 24 40 48V92L0 68Z" fill="#488fe6" fill-opacity=".27"/>
-<path d="M40 48 80 24V68L40 92Z" fill="url(#{prefix}-violet)" fill-opacity=".62"/>
+<path d="M0 24 40 0 80 24 40 48Z" fill="url(#{prefix}-blue)" fill-opacity=".62"/>
+<path d="M0 24 40 48V92L0 68Z" fill="url(#{prefix}-blue)" fill-opacity=".28"/>
+<path d="M40 48 80 24V68L40 92Z" fill="url(#{prefix}-violet)" fill-opacity=".75"/>
+<path d="M4 28 36 47V80L4 63Z" fill="#91c9ff" fill-opacity=".13" stroke="none"/>
 <path d="M0 24 40 48 80 24M40 48V92" fill="none" stroke="#ddf4ff"/>
 </g>'''
 
@@ -148,11 +154,14 @@ def icon(prefix: str, slug: str, x: int, y: int, size: int) -> str:
 
 def illustration(prefix: str, slug: str) -> str:
     result = f'<g aria-hidden="true" transform="translate(653 20)"><rect width="226" height="266" rx="17" fill="url(#{prefix}-glass)" stroke="#7395da" stroke-opacity=".45"/><g clip-path="url(#{prefix}-art-clip)">'
+    result += f'<ellipse cx="226" cy="266" rx="210" ry="230" fill="url(#{prefix}-halo)" opacity=".8"/><ellipse cx="30" cy="0" rx="190" ry="190" fill="url(#{prefix}-purple)" opacity=".45"/>'
     if slug == 'isolation':
         result += '<g stroke="#4b80b9" stroke-width=".6" opacity=".3">'
         for offset in range(-80, 200, 35):
             result += f'<path d="M{offset} 150 226 {263-offset/2:g}M0 {130+offset/2:g} 226 {17+offset/2:g}"/>'
         result += '</g>'
+        result += f'<path d="M18 209 112 159 206 209 112 258Z" fill="#79aaff" fill-opacity=".10" stroke="#679dff" stroke-opacity=".65"/>'
+        result += f'<g opacity=".7" filter="url(#{prefix}-glow)">{cube(prefix, 60, 60, 1.3)}</g>'
         for y, opacity in [(124, .32), (92, .55), (60, 1)]:
             result += cube(prefix, 60, y, 1.3, opacity)
     elif slug == 'performance':
@@ -161,13 +170,13 @@ def illustration(prefix: str, slug: str) -> str:
             result += f'<path d="M{x} 40V226"/>'
         result += '</g>'
         curve = 'M15 192C35 164 38 117 67 139S99 197 116 129 145 53 164 70 177 112 211 58'
-        result += f'<path d="{curve}L211 226H15Z" fill="url(#{prefix}-violet)" opacity=".45"/>'
+        result += f'<path d="{curve}L211 246H15Z" fill="url(#{prefix}-wave)"/>'
         result += f'<path d="{curve}" fill="none" stroke="#b69aff" stroke-width="5" filter="url(#{prefix}-glow)"/>'
         result += f'<path d="{curve}" fill="none" stroke="#bfa4ff" stroke-width="1.8"/>'
         result += '<path d="M15 213C35 192 52 175 75 198S106 213 130 159 169 147 211 153" fill="none" stroke="#5989e4" stroke-opacity=".6"/>'
     else:
         for x, y, opacity in [(41, 36, .32), (29, 55, .55), (17, 74, .9)]:
-            result += f'<g transform="translate({x} {y}) skewY(15)" opacity="{opacity}"><rect width="154" height="148" rx="9" fill="url(#{prefix}-glass)" stroke="#889be8"/><path d="M1 25H153" stroke="#7c92cf"/>'
+            result += f'<g transform="translate({x} {y}) skewY(15)" opacity="{opacity}"><rect width="154" height="148" rx="9" fill="url(#{prefix}-blue)" fill-opacity=".23" stroke="#b3c8ff"/><rect width="154" height="148" rx="9" fill="url(#{prefix}-glass)"/><path d="M1 25H153" stroke="#a8c8ff" stroke-opacity=".6"/>'
             result += '<circle cx="12" cy="13" r="3" fill="#cc9df9"/><circle cx="23" cy="13" r="3" fill="#8abaff"/><circle cx="34" cy="13" r="3" fill="#99def0"/>'
             result += '<rect x="13" y="39" width="24" height="92" rx="4" fill="#4b70bd" opacity=".45"/><rect x="49" y="39" width="91" height="40" rx="4" fill="#6695e4" opacity=".45"/><path d="M49 94H137M49 106H128M49 118H137M49 130H105" stroke="#739dde" stroke-width="4" stroke-linecap="round"/></g>'
     result += '<rect x="183" y="12" width="30" height="30" rx="10" fill="#8b9fea" fill-opacity=".15" stroke="#9eaff0" stroke-opacity=".45"/><path d="M193 32 204 21M193 21H204V32" fill="none" stroke="#e1eaff" stroke-width="1.8" stroke-linecap="round"/>'
@@ -180,19 +189,19 @@ def featured(x: int, y: int) -> str:
             + text('Featured', 26, 16.5, 12, '#f1f6ff', 600) + '</g>')
 
 
-def badges(technologies: tuple[str, ...], x: int, y: int, width: int) -> str:
+def badges(prefix: str, technologies: tuple[str, ...], x: int, y: int, width: int) -> str:
     result = '<g aria-label="Technology stack">'
     current_x, current_y = float(x), y
     for technology in technologies:
-        pill_width = round(text_width(technology, 13) + 24)
+        pill_width = round(text_width(technology, 15) + 24)
         if pill_width > width:
             raise ValueError(f'Technology pill does not fit: {technology}')
         if current_x + pill_width > x + width:
-            current_x, current_y = float(x), current_y + 32
+            current_x, current_y = float(x), current_y + 34
         stroke, color, fill = COLORS[technology]
-        result += f'<g transform="translate({current_x:g} {current_y})"><rect width="{pill_width}" height="26" rx="13" fill="{fill}" stroke="{stroke}" stroke-opacity=".7"/>'
+        result += f'<g transform="translate({current_x:g} {current_y})"><rect width="{pill_width}" height="28" rx="14" fill="{fill}" fill-opacity=".65" stroke="{stroke}"/><rect width="{pill_width}" height="28" rx="14" fill="url(#{prefix}-glass)"/>'
         result += '<path d="M13 2H' + str(pill_width - 13) + '" stroke="#ffffff" stroke-opacity=".15"/>'
-        result += text(technology, 12, 18, 13, color) + '</g>'
+        result += text(technology, 12, 19, 15, color) + '</g>'
         current_x += pill_width + 8
     return result + '</g>'
 
@@ -205,38 +214,59 @@ def repository_icon(x: int, y: int, size: int = 20) -> str:
 def render_card(project: Project, mobile: bool) -> str:
     layout = 'mobile' if mobile else 'desktop'
     prefix = f'project-{project.slug}-{layout}'
-    width, height = (360, 368) if mobile else (900, 306)
+    width, height, body_height = (360, 428, 374) if mobile else (900, 346, 292)
     technologies = project.mobile if mobile else project.desktop
     if mobile and len(technologies) > 7:
         raise ValueError('Mobile cards support at most seven technologies')
     result = start_svg(prefix, width, height, project.name + ' — ' + project.category,
-                       project.description + ' Technologies: ' + ', '.join(technologies) + '. Open the project repository.')
+                       project.description + ' Technologies: ' + ', '.join(technologies) + '. Open the project repository.',
+                       viewport=(0, 0, width, body_height))
     if mobile:
         result += icon(prefix, project.slug, 20, 24, 58)
-        result += text(project.name, 91, 45, 20, '#f3f6ff', 650)
+        result += text(project.name, 91, 45, 22, '#f3f6ff', 650)
         result += text(project.category, 91, 68, 13, '#9ccaff')
         if project.featured:
             result += featured(91, 85)
-        description_x, description_y, available, size, leading = 20, 136, 320, 16, 22
-        badge_x, badge_y, badge_width, footer_y = 20, 245, 320, 337
+        description_x, description_y, available, size, leading = 20, 136, 320, 17, 23
+        badge_x, badge_y, badge_width = 20, 258, 320
     else:
         result += icon(prefix, project.slug, 24, 28, 80)
-        result += text(project.name, 132, 57, 25, '#f3f6ff', 650)
-        result += text(project.category, 132, 85, 16, '#9ccaff')
+        result += text(project.name, 132, 57, 28, '#f3f6ff', 650)
+        result += text(project.category, 132, 85, 18, '#9ccaff')
         if project.featured:
-            result += featured(399, 36)
+            result += featured(423, 36)
         result += illustration(prefix, project.slug)
-        description_x, description_y, available, size, leading = 132, 121, 498, 15, 22
-        badge_x, badge_y, badge_width, footer_y = 132, 199, 496, 281
+        description_x, description_y, available, size, leading = 132, 121, 498, 18, 25
+        badge_x, badge_y, badge_width = 132, 210, 496
     lines = wrap_text(project.description, available, size)
     if description_y + (len(lines) - 1) * leading > badge_y - 16:
         raise ValueError(f'Description exceeds {layout} layout: {project.name}')
     for index, line in enumerate(lines):
         result += text(line, description_x, description_y + leading * index, size)
-    result += badges(technologies, badge_x, badge_y, badge_width)
-    result += repository_icon(badge_x, footer_y - 16)
-    result += text('Repository', badge_x + 28, footer_y, 14, '#bdd9ff')
-    result += f'<path d="M{badge_x+108} {footer_y-5}h13m-5-5 5 5-5 5" fill="none" stroke="#bdd9ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+    result += badges(prefix, technologies, badge_x, badge_y, badge_width)
+    return result + '\n</svg>\n'
+
+
+def render_footer(action: str, mobile: bool) -> str:
+    """Two equal image slices make independent HTML links on one glass footer."""
+    layout = 'mobile' if mobile else 'desktop'
+    width, height, top = (360, 428, 374) if mobile else (900, 346, 292)
+    half = width // 2
+    offset = 0 if action == 'repository' else half
+    prefix = f'projects-{action}-{layout}'
+    label = action.capitalize()
+    result = start_svg(prefix, width, height, label, f'Open project {action}.',
+                       viewport=(offset, top, half, height - top))
+    x = (20 if mobile else 132) if action == 'repository' else offset + (12 if mobile else 18)
+    y = top + 33
+    if action == 'repository':
+        result += repository_icon(x, y - 17, 21)
+        result += text(label, x + 28, y, 15, '#d2e5ff')
+        arrow = x + 117
+        result += f'<path d="M{arrow} {y-5}h12m-5-5 5 5-5 5" fill="none" stroke="#c5dfff" stroke-width="1.5"/>'
+    else:
+        result += f'<path d="M{x+3} {y-19}h10l5 5v18H{x+3}Zm10 0v5h5M{x+7} {y-9}h7M{x+7} {y-4}h7" fill="none" stroke="#d2e5ff" stroke-width="1.5" stroke-linejoin="round"/>'
+        result += text(label, x + 26, y, 15, '#d2e5ff')
     return result + '\n</svg>\n'
 
 
@@ -276,6 +306,8 @@ def generate(output: Path) -> None:
         for project in PROJECTS:
             assets[f'{project.slug}-{layout}.svg'] = render_card(project, mobile)
         assets[f'header-{layout}.svg'] = render_header(mobile)
+        for action in ('repository', 'documentation'):
+            assets[f'{action}-{layout}.svg'] = render_footer(action, mobile)
     # Validate every image before replacing any generated assets.
     for value in assets.values():
         ET.fromstring(value)

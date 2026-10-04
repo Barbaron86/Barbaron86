@@ -78,8 +78,8 @@
 <h3 align="left">
   <a href="https://github.com/Barbaron86?tab=repositories">
     <picture>
-      <source media="(max-width: 640px)" srcset="assets/projects/header-mobile.svg" />
-      <img src="assets/projects/header-desktop.svg" width="900" alt="My Projects — view all repositories" />
+      <source media="(max-width: 800px)" srcset="assets/projects/header-mobile.svg" />
+      <img src="assets/projects/header-desktop.svg" width="900" alt="My Projects. A collection of QA automation and performance testing projects with real-world scenarios, modern tools and CI/CD. View all repositories." />
     </picture>
   </a>
 </h3>
@@ -87,37 +87,31 @@
 <p align="center">
   <a href="https://github.com/Barbaron86/isolation-api-tests">
     <picture>
-      <source media="(max-width: 640px)" srcset="assets/projects/isolation-mobile.svg" />
-      <img src="assets/projects/isolation-desktop.svg" width="900" alt="isolation-api-tests — Isolated API &amp; Integration Testing. Featured project. An API testing framework with custom FastAPI mocks for service isolation. Tests real HTTP/gRPC interactions, Kafka events and PostgreSQL data. Technologies: Python, Pytest, FastAPI, HTTPX, gRPC, Kafka, PostgreSQL, Docker, Allure. Open repository." />
+      <source media="(max-width: 800px)" srcset="assets/projects/isolation-mobile.svg" />
+      <img src="assets/projects/isolation-desktop.svg" width="900" align="top" alt="isolation-api-tests — Isolated API &amp; Integration Testing. Featured project. An API testing framework with custom FastAPI mocks for service isolation. Tests real HTTP/gRPC interactions, Kafka events and PostgreSQL data. Technologies: Python, Pytest, FastAPI, HTTPX, gRPC, Kafka, PostgreSQL, Docker, Allure. Open repository." />
     </picture>
-  </a>
-</p>
-<p align="right">
-  <a href="https://github.com/Barbaron86/isolation-api-tests/blob/main/README.md">Documentation ↗</a>
+  </a><br />
+  <a href="https://github.com/Barbaron86/isolation-api-tests"><picture><source media="(max-width: 800px)" srcset="assets/projects/repository-mobile.svg" /><img src="assets/projects/repository-desktop.svg" width="50%" align="top" alt="Repository" /></picture></a><a href="https://github.com/Barbaron86/isolation-api-tests/blob/main/README.md"><picture><source media="(max-width: 800px)" srcset="assets/projects/documentation-mobile.svg" /><img src="assets/projects/documentation-desktop.svg" width="50%" align="top" alt="Documentation" /></picture></a>
 </p>
 
 <p align="center">
   <a href="https://github.com/Barbaron86/performance-tests">
     <picture>
-      <source media="(max-width: 640px)" srcset="assets/projects/performance-mobile.svg" />
-      <img src="assets/projects/performance-desktop.svg" width="900" alt="performance-tests — Performance &amp; Load Testing. A Locust-based load testing framework with decoupled HTTP/gRPC clients, automated test data seeding, Prometheus/Grafana monitoring and CI/CD reporting. Technologies: Python, Locust, gRPC, HTTPX, Docker, Prometheus, Grafana. Open repository." />
+      <source media="(max-width: 800px)" srcset="assets/projects/performance-mobile.svg" />
+      <img src="assets/projects/performance-desktop.svg" width="900" align="top" alt="performance-tests — Performance &amp; Load Testing. A Locust-based load testing framework with decoupled HTTP/gRPC clients, automated test data seeding, Prometheus/Grafana monitoring and CI/CD reporting. Technologies: Python, Locust, gRPC, HTTPX, Docker, Prometheus, Grafana. Open repository." />
     </picture>
-  </a>
-</p>
-<p align="right">
-  <a href="https://github.com/Barbaron86/performance-tests/blob/main/README.md">Documentation ↗</a>
+  </a><br />
+  <a href="https://github.com/Barbaron86/performance-tests"><picture><source media="(max-width: 800px)" srcset="assets/projects/repository-mobile.svg" /><img src="assets/projects/repository-desktop.svg" width="50%" align="top" alt="Repository" /></picture></a><a href="https://github.com/Barbaron86/performance-tests/blob/main/README.md"><picture><source media="(max-width: 800px)" srcset="assets/projects/documentation-mobile.svg" /><img src="assets/projects/documentation-desktop.svg" width="50%" align="top" alt="Documentation" /></picture></a>
 </p>
 
 <p align="center">
   <a href="https://github.com/Barbaron86/autotest-ui">
     <picture>
-      <source media="(max-width: 640px)" srcset="assets/projects/ui-mobile.svg" />
-      <img src="assets/projects/ui-desktop.svg" width="900" alt="autotest-ui — UI Test Automation. A Playwright-based UI testing framework with Page Object architecture, parallel cross-browser execution, reusable authentication state, Allure reporting and CI/CD. Technologies: Python, Playwright, Pytest, pytest-xdist, Pydantic, Poetry, Allure, Ruff, Mypy. Open repository." />
+      <source media="(max-width: 800px)" srcset="assets/projects/ui-mobile.svg" />
+      <img src="assets/projects/ui-desktop.svg" width="900" align="top" alt="autotest-ui — UI Test Automation. A Playwright-based UI testing framework with Page Object architecture, parallel cross-browser execution, reusable authentication state, Allure reporting and CI/CD. Technologies: Python, Playwright, Pytest, pytest-xdist, Pydantic, Poetry, Allure, Ruff, Mypy. Open repository." />
     </picture>
-  </a>
-</p>
-<p align="right">
-  <a href="https://github.com/Barbaron86/autotest-ui/blob/main/README.md">Documentation ↗</a>
+  </a><br />
+  <a href="https://github.com/Barbaron86/autotest-ui"><picture><source media="(max-width: 800px)" srcset="assets/projects/repository-mobile.svg" /><img src="assets/projects/repository-desktop.svg" width="50%" align="top" alt="Repository" /></picture></a><a href="https://github.com/Barbaron86/autotest-ui/blob/main/README.md"><picture><source media="(max-width: 800px)" srcset="assets/projects/documentation-mobile.svg" /><img src="assets/projects/documentation-desktop.svg" width="50%" align="top" alt="Documentation" /></picture></a>
 </p>
 
 ---
