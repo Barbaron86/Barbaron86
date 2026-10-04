@@ -6,7 +6,7 @@ Edit [projects.json](../assets/projects/projects.json), then run from the reposi
 python scripts/generate_project_cards.py
 ```
 
-The command regenerates both layouts, all linked navigation slices, and the README block between `MY PROJECTS` markers. The outer panel height, project order, spacing, and final rounded corners follow the list automatically. Other README sections are preserved.
+The command regenerates mobile, tablet, and desktop layouts, all linked navigation slices, and the README block between `MY PROJECTS` markers. The outer panel height, project order, spacing, and final rounded corners follow the list automatically. Other README sections are preserved.
 
 To add a project, append one object:
 
@@ -43,9 +43,31 @@ Project content and illustrations are decorative; the two footer buttons provide
 "secondary_url": "https://example.com/report/"
 ```
 
-Current resources are the API architecture diagram, an example Locust report, and the UI project's Allure report. The Locust link identifies a particular example run; update its URL to feature a different run. The UI report's `/main/` entry redirects to its published report.
+Current resources are the API architecture diagram, the latest published Locust report, and the UI project's Allure report. The report links use their stable `/latest/` and `/main/` entries.
 
-Every layout uses two footer slices with a boundary inside the gap between the buttons aligned with the first technology badge. Responsive image widths match each layout's slice proportions and preserve the shared outer panel. When a project has no secondary action, the right slice displays only the background and has no link. Body images use anchors without `href` to suppress GitHub's automatic links to image files.
+The generator draws a complete board once per layout, including the outer surface, each card's frame, and both buttons. `board_slice()` crops that same scene for the header, card bodies, and two independently linked footer images. The footer boundary is a whole SVG pixel inside the button gap. Image dimensions and `viewBox` extents are identical integers; `preserveAspectRatio="none"` on the crops prevents separate aspect-ratio letterboxing after browser subpixel rounding. It does not change the intended proportions: HTML widths use each crop's exact fraction of the board.
+
+Buttons remain left aligned with gaps of 8, 12, and 16 SVG units in mobile, tablet, and desktop layouts. Their rendered spacing scales with the board. Each footer image retains its own HTML link. When a project has no secondary action, the right slice displays only the background and has no link. Body images use anchors without `href` to suppress GitHub's automatic links to image files.
+
+## Responsive layouts
+
+`picture` selects the composition, and the matching `source`/`img` width keeps the footer proportions synchronized with the body. The image itself does not contain navigation handlers. No JavaScript, inline README styles, positioning overlays, or presentation tables are required.
+
+The breakpoints account for the profile sidebar, which appears at a viewport width of 768px and reduces the README's available width. Measurements of the current profile showed 518px of content at a 600px viewport, 398px at 768px, and a maximum of 846px at 1280–1440px. The capped GitHub profile container prevents enlargement on wider desktop screens.
+
+| Viewport | Composition | Board width |
+| --- | --- | --- |
+| Up to 480px | Mobile | 392 SVG units |
+| 481–767px | Tablet | 600 SVG units |
+| 768–820px, with the sidebar | Mobile | 392 SVG units |
+| 821–1180px | Tablet | 600 SVG units |
+| Above 1180px | Desktop | 940 SVG units |
+
+The narrow portrait-tablet range deliberately uses the compact composition because its actual content width is similar to a phone's. In particular, 800px and 801px now select the same layout. Desktop starts when the README can display its horizontal composition at about 80% of native width, instead of reducing description text to about 8px.
+
+Tablet cards have their own text wrapping, full technology stack, and smaller illustrations aligned with the visible top of the first description line. The Featured badge sits next to the project title. Media queries inside the SVG select compact, medium, and wide content at displayed body-image widths of 560px and 700px. They keep typography and icons restrained as the tablet composition grows. The compact profile is the default; minimum-width overrides cover fractional widths without gaps, including browser zoom. These styles are inside the SVG assets, not CSS attached to the README.
+
+Mobile retains its configured subset of at most seven technologies. Desktop retains the horizontal illustration on the right and uses 22-unit description text to remain readable at its lower switching boundary. If GitHub changes the profile's sidebar or container widths, remeasure the available content before changing `MOBILE_MEDIA` and `TABLET_MEDIA`.
 
 ## Technology categories
 
@@ -58,7 +80,7 @@ Every layout uses two footer slices with a boundary inside the gap between the b
 | `api` | Cyan `#24A7B1` | FastAPI, HTTPX, gRPC |
 | `data` | Amber `#CDA14D` | Kafka, PostgreSQL, Pydantic |
 | `infrastructure` | Indigo `#6376D8` | Docker, Poetry |
-| `monitoring` | Orange `#BD7245` | Prometheus, Grafana |
+| `monitoring` | Orange `#BD7245` | Prometheus, Grafana, Loguru |
 | `quality` | Purple `#A17BDD` | Ruff, Mypy |
 
 Pydantic belongs to data because it validates data schemas. Poetry belongs to infrastructure because it manages project dependencies and environments. Categories describe a primary role, not a tool's branding.
