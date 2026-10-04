@@ -320,7 +320,7 @@ def render_card(project: Project, mobile: bool) -> str:
 def footer_split(mobile: bool) -> float:
     """Place the link boundary halfway through the gap between left-aligned buttons."""
     metrics = LAYOUTS['mobile' if mobile else 'desktop']
-    left = 12 if mobile else 20
+    left = 20 if mobile else 132
     source_width = 8 + 28 + text_width('Source code', 15) + 34
     gap = 8 if mobile else 16
     return metrics.padding + left + source_width + gap / 2
@@ -338,7 +338,7 @@ def render_footer(project: Project, action: str, mobile: bool) -> str:
                        viewport=(0, top, width, height - top))
     if label is None:
         return result + '\n</svg>\n'
-    source_x = 20 if mobile else 28
+    source_x = (20 if mobile else 132) + 8
     source_width = 8 + 28 + text_width('Source code', 15) + 34
     x = source_x if action == 'repository' else source_x + source_width + (8 if mobile else 16)
     y = top + 33
