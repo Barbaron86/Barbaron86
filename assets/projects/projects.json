@@ -1,0 +1,90 @@
+[
+  {
+    "slug": "isolation",
+    "name": "isolation-api-tests",
+    "category": "Isolated API & Integration Testing",
+    "description": "An API testing framework with custom FastAPI mocks for service isolation. Tests real HTTP/gRPC interactions, Kafka events and PostgreSQL data.",
+    "desktop": [
+      "Python",
+      "Pytest",
+      "FastAPI",
+      "HTTPX",
+      "gRPC",
+      "Kafka",
+      "PostgreSQL",
+      "Docker",
+      "Allure"
+    ],
+    "mobile": [
+      "Python",
+      "Pytest",
+      "FastAPI",
+      "gRPC",
+      "Kafka",
+      "PostgreSQL",
+      "Docker"
+    ],
+    "featured": true,
+    "art": "api",
+    "secondary_label": "Architecture",
+    "secondary_url": "https://github.com/Barbaron86/isolation-api-tests/blob/main/docs/architecture/core.png"
+  },
+  {
+    "slug": "performance",
+    "name": "performance-tests",
+    "category": "Performance & Load Testing",
+    "description": "A Locust-based load testing framework with decoupled HTTP/gRPC clients, automated test data seeding, Prometheus/Grafana monitoring and CI/CD reporting.",
+    "desktop": [
+      "Python",
+      "Locust",
+      "gRPC",
+      "HTTPX",
+      "Docker",
+      "Prometheus",
+      "Grafana"
+    ],
+    "mobile": [
+      "Python",
+      "Locust",
+      "gRPC",
+      "HTTPX",
+      "Docker",
+      "Prometheus",
+      "Grafana"
+    ],
+    "featured": false,
+    "art": "load",
+    "secondary_label": "Load report",
+    "secondary_url": "https://barbaron86.github.io/performance-tests/30481711334/"
+  },
+  {
+    "slug": "ui",
+    "name": "autotest-ui",
+    "category": "UI Test Automation",
+    "description": "A Playwright-based UI testing framework with Page Object architecture, parallel cross-browser execution, reusable authentication state, Allure reporting and CI/CD.",
+    "desktop": [
+      "Python",
+      "Playwright",
+      "Pytest",
+      "pytest-xdist",
+      "Pydantic",
+      "Poetry",
+      "Allure",
+      "Ruff",
+      "Mypy"
+    ],
+    "mobile": [
+      "Python",
+      "Playwright",
+      "Pytest",
+      "pytest-xdist",
+      "Allure",
+      "Ruff",
+      "Mypy"
+    ],
+    "featured": false,
+    "art": "ui",
+    "secondary_label": "Test report",
+    "secondary_url": "https://barbaron86.github.io/autotest-ui/main/"
+  }
+]

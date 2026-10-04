@@ -1,0 +1,20 @@
+{
+  "Python": "languages",
+  "Pytest": "testing",
+  "pytest-xdist": "testing",
+  "Playwright": "testing",
+  "Locust": "testing",
+  "Allure": "testing",
+  "FastAPI": "api",
+  "HTTPX": "api",
+  "gRPC": "api",
+  "Kafka": "data",
+  "PostgreSQL": "data",
+  "Pydantic": "data",
+  "Docker": "infrastructure",
+  "Poetry": "infrastructure",
+  "Prometheus": "monitoring",
+  "Grafana": "monitoring",
+  "Ruff": "quality",
+  "Mypy": "quality"
+}
