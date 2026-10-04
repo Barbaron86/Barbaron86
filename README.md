@@ -88,7 +88,7 @@
   <a href="https://github.com/Barbaron86/isolation-api-tests">
     <picture>
       <source media="(max-width: 640px)" srcset="assets/projects/isolation-mobile.svg" />
-      <img src="assets/projects/isolation-desktop.svg" width="900" alt="isolation-api-tests — Isolated API & Integration Testing. Open repository." />
+      <img src="assets/projects/isolation-desktop.svg" width="900" alt="isolation-api-tests — Isolated API &amp; Integration Testing. Featured project. An API testing framework with custom FastAPI mocks for service isolation. Tests real HTTP/gRPC interactions, Kafka events and PostgreSQL data. Technologies: Python, Pytest, FastAPI, HTTPX, gRPC, Kafka, PostgreSQL, Docker, Allure. Open repository." />
     </picture>
   </a>
 </p>
@@ -100,7 +100,7 @@
   <a href="https://github.com/Barbaron86/performance-tests">
     <picture>
       <source media="(max-width: 640px)" srcset="assets/projects/performance-mobile.svg" />
-      <img src="assets/projects/performance-desktop.svg" width="900" alt="performance-tests — Performance & Load Testing. Open repository." />
+      <img src="assets/projects/performance-desktop.svg" width="900" alt="performance-tests — Performance &amp; Load Testing. A Locust-based load testing framework with decoupled HTTP/gRPC clients, automated test data seeding, Prometheus/Grafana monitoring and CI/CD reporting. Technologies: Python, Locust, gRPC, HTTPX, Docker, Prometheus, Grafana. Open repository." />
     </picture>
   </a>
 </p>
@@ -112,17 +112,14 @@
   <a href="https://github.com/Barbaron86/autotest-ui">
     <picture>
       <source media="(max-width: 640px)" srcset="assets/projects/ui-mobile.svg" />
-      <img src="assets/projects/ui-desktop.svg" width="900" alt="autotest-ui — UI Test Automation. Open repository." />
+      <img src="assets/projects/ui-desktop.svg" width="900" alt="autotest-ui — UI Test Automation. A Playwright-based UI testing framework with Page Object architecture, parallel cross-browser execution, reusable authentication state, Allure reporting and CI/CD. Technologies: Python, Playwright, Pytest, pytest-xdist, Pydantic, Poetry, Allure, Ruff, Mypy. Open repository." />
     </picture>
   </a>
 </p>
 <p align="right">
   <a href="https://github.com/Barbaron86/autotest-ui/blob/main/README.md">Documentation ↗</a>
 </p>
---- | :--- | :--- |
-| [isolation-api-tests](https://github.com/Barbaron86/isolation-api-tests) | Microservice-based banking system (API Gateway, Operations). Demonstrates asynchronous financial operation processing via Kafka, isolated domain testing, dual HTTP/gRPC API support, and automated CI/CD test runs. | `Python 3.12` `Pytest` `gRPC` `FastAPI` `Kafka` `PostgreSQL` `SQLAlchemy` `Pydantic` `Docker` `Allure` |
-| [performance-tests](https://github.com/Barbaron86/performance-tests) | High-throughput load testing framework for a microservice-based banking system. Features decoupled HTTP/gRPC clients, automated test data seeding via Locust hooks, and CI-integrated reporting with GitHub Pages. | `Python 3.12` `Locust` `gRPC` `HTTPX` `Pydantic` `Faker` `Docker` `Prometheus` `Grafana` |
-| [autotest-ui](https://github.com/Barbaron86/autotest-ui) | Web UI test automation framework with layered Page Object architecture, cross-browser parallel execution, reusable in-memory authentication state, Allure reporting, UI interaction coverage, and CI/CD with optional AI-assisted pull request review. | `Python 3.12` `Playwright` `Pytest` `pytest-xdist` `Pydantic` `Poetry` `Ruff` `Mypy` `Allure` `Loguru` |
+
 ---
 
 <h3 align="left">
