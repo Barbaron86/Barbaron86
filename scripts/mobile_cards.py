@@ -60,7 +60,6 @@ def mobile_streak(svg: str, theme_name: str) -> str:
 <text x="133" y="173" text-anchor="middle" fill="{theme["MUTED"]}" font-size="10">{values["range"]}</text>
 <rect x="48" y="188" width="168" height="5" rx="2.5" fill="{theme["TRACK"]}"/>
 <rect x="48" y="188" width="168" height="5" rx="2.5" fill="url(#accent)"/>
-<text x="33" y="207" fill="{theme["MUTED"]}" font-size="10">Every day counts</text>
 <text x="347" y="77" text-anchor="middle" fill="{theme["MUTED"]}" font-size="12">TOTAL</text>
 <text x="347" y="111" text-anchor="middle" fill="{theme["PRIMARY"]}" font-size="30" font-weight="700">{values["total"]}</text>
 <text x="499" y="77" text-anchor="middle" fill="{theme["MUTED"]}" font-size="12">LONGEST</text>

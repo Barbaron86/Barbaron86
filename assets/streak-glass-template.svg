@@ -26,7 +26,6 @@
 <text x="144" y="174" text-anchor="middle" fill="{{MUTED}}" font-size="11">{{CURRENT_RANGE}}</text>
 <rect x="58" y="198" width="172" height="5" rx="2.5" fill="{{TRACK}}"/>
 <rect x="58" y="198" width="172" height="5" rx="2.5" fill="url(#accent)" fill-opacity="{{BAR_OPACITY}}"/>
-<text x="36" y="230" fill="{{MUTED}}" font-size="10">{{STREAK_MESSAGE}}</text>
 <text x="396" y="60" text-anchor="middle" fill="{{MUTED}}" font-size="11" letter-spacing=".7">TOTAL CONTRIBUTIONS</text>
 <text x="396" y="105" text-anchor="middle" fill="{{PRIMARY}}" font-size="34" font-weight="750">{{TOTAL}}</text>
 <text x="396" y="123" text-anchor="middle" fill="{{MUTED}}" font-size="10">Since {{FIRST_CONTRIBUTION}}</text>
