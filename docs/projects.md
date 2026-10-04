@@ -27,11 +27,31 @@ To add a project, append one object:
 - `mobile` must be a subset of `desktop` with at most seven technologies.
 - `art` selects a reusable illustration: `api` (cubes), `load` (chart), or `ui` (windows, also the default).
 - `featured` is optional and defaults to `false`; at most one project may be featured.
-- New technology labels get a neutral glass badge automatically; adding a color is optional.
+- New technology labels get a neutral glass badge automatically. Assign their category in `technologies.json` to use the shared category color.
 
 Commit `projects.json`, the regenerated SVGs, and `README.md` together. No workflow or generator changes are needed to add a project that fits an existing layout. Reorder the list to change display order.
 
 Content is wrapped and validated before files are written. If a long name, description, or badge exceeds the layout, shorten its text; the generator reports the problem rather than cropping it silently.
+
+## Technology categories
+
+[technologies.json](../assets/projects/technologies.json) maps tool names to their primary role. Every tool in the same category uses the same border, text, and translucent fill colors in both layouts.
+
+| Category | Border accent | Current tools |
+| --- | --- | --- |
+| `languages` | Blue `#4388E3` | Python |
+| `testing` | Green `#329967` | Pytest, pytest-xdist, Playwright, Locust, Allure |
+| `api` | Cyan `#24A7B1` | FastAPI, HTTPX, gRPC |
+| `data` | Amber `#CDA14D` | Kafka, PostgreSQL, Pydantic |
+| `infrastructure` | Indigo `#6376D8` | Docker, Poetry |
+| `monitoring` | Orange `#BD7245` | Prometheus, Grafana |
+| `quality` | Purple `#A17BDD` | Ruff, Mypy |
+
+Pydantic belongs to data because it validates data schemas. Poetry belongs to infrastructure because it manages project dependencies and environments. Categories describe a primary role, not a tool's branding.
+
+For example, add `"NewTool": "testing"` to `technologies.json` and run the same generation command to give that tool the testing color. No generator edits are required. Unclassified tools remain neutral gray; misspelled category names stop generation before files are written. Commit the mapping with regenerated SVGs when changing it.
+
+## Preview generation
 
 For generation into a temporary folder without updating the profile:
 

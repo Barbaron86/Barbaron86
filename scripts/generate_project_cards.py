@@ -90,29 +90,33 @@ LAYOUTS = {
     'mobile': Layout(360, 398, 344, 16, 246, 12),
 }
 
-# Stroke, text and translucent fill of each technology pill.
-COLORS = {
-    'Python': ('#4388e3', '#baddff', '#1a3c70'),
-    'Pytest': ('#566576', '#e0e7ef', '#2c3a4b'),
-    'FastAPI': ('#249e92', '#a0f6e4', '#123f41'),
-    'HTTPX': ('#647688', '#e0e9f7', '#29384c'),
-    'gRPC': ('#24a7b1', '#93f2f1', '#12434b'),
-    'Kafka': ('#7761cf', '#dbccff', '#312258'),
-    'PostgreSQL': ('#4982d1', '#bedcff', '#1b365a'),
-    'Docker': ('#329ac9', '#b4eeff', '#133d59'),
-    'Allure': ('#329967', '#adf7c7', '#16422c'),
-    'Locust': ('#329967', '#adf7c7', '#16422c'),
-    'Prometheus': ('#bd7245', '#ffd4b7', '#4b2c22'),
-    'Grafana': ('#bd7245', '#ffd4b7', '#4b2c22'),
-    'Playwright': ('#329967', '#adf7c7', '#16422c'),
-    'pytest-xdist': ('#566576', '#e0e7ef', '#2c3a4b'),
-    'Pydantic': ('#b56190', '#ffcae4', '#492540'),
-    'Poetry': ('#7761cf', '#dbccff', '#312258'),
-    'Ruff': ('#7761cf', '#dbccff', '#312258'),
-    'Mypy': ('#6376d8', '#d4d9ff', '#262b62'),
+# Stroke, text and translucent fill, shared by every tool in a category.
+CATEGORY_COLORS = {
+    'languages': ('#4388e3', '#baddff', '#1a3c70'),
+    'testing': ('#329967', '#adf7c7', '#16422c'),
+    'api': ('#24a7b1', '#93f2f1', '#12434b'),
+    'data': ('#cda14d', '#f5e0a8', '#49381c'),
+    'infrastructure': ('#6376d8', '#d4d9ff', '#262b62'),
+    'monitoring': ('#bd7245', '#ffd4b7', '#4b2c22'),
+    'quality': ('#a17bdd', '#e8d1ff', '#382650'),
 }
+NEUTRAL_COLORS = ('#647688', '#e0e9f7', '#29384c')
 FONT = 'Segoe UI,Arial,sans-serif'
 NS = '{http://www.w3.org/2000/svg}'
+
+
+def load_technology_categories(path: Path) -> dict[str, str]:
+    categories = json.loads(path.read_text(encoding='utf-8'))
+    if not isinstance(categories, dict):
+        raise ValueError('technologies.json must map technology labels to category names')
+    for label, category in categories.items():
+        if (not isinstance(label, str) or not label or not isinstance(category, str)
+                or category not in CATEGORY_COLORS):
+            raise ValueError(f'Invalid technology category for {label}: {category}')
+    return categories
+
+
+TECHNOLOGY_CATEGORIES = load_technology_categories(ROOT / 'assets' / 'projects' / 'technologies.json')
 
 
 def text_width(value: str, size: float) -> float:
@@ -249,7 +253,7 @@ def badges(prefix: str, technologies: tuple[str, ...], x: int, y: int, width: in
             current_x, current_y = float(x), current_y + 34
         if current_y + 28 > bottom:
             raise ValueError('Technology stack exceeds the card; use fewer or shorter labels')
-        stroke, color, fill = COLORS.get(technology, COLORS['HTTPX'])
+        stroke, color, fill = CATEGORY_COLORS.get(TECHNOLOGY_CATEGORIES.get(technology), NEUTRAL_COLORS)
         result += f'<g transform="translate({current_x:g} {current_y})"><rect width="{pill_width}" height="28" rx="14" fill="{fill}" fill-opacity=".65" stroke="{stroke}"/><rect width="{pill_width}" height="28" rx="14" fill="url(#{prefix}-glass)"/>'
         result += '<path d="M13 2H' + str(pill_width - 13) + '" stroke="#ffffff" stroke-opacity=".15"/>'
         result += text(technology, 12, 19, 15, color) + '</g>'
