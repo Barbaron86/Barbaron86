@@ -76,14 +76,50 @@
 ---
 
 <h3 align="left">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/repositories-dark.svg" />
-    <img src="https://raw.githubusercontent.com/Barbaron86/Barbaron86/main/assets/headings/repositories-light.svg" height="36" alt="Featured Repositories" />
-  </picture>
+  <a href="https://github.com/Barbaron86?tab=repositories">
+    <picture>
+      <source media="(max-width: 640px)" srcset="assets/projects/header-mobile.svg" />
+      <img src="assets/projects/header-desktop.svg" width="900" alt="My Projects — view all repositories" />
+    </picture>
+  </a>
 </h3>
 
-| Project | Description | Tech Stack |
-| :--- | :--- | :--- |
+<p align="center">
+  <a href="https://github.com/Barbaron86/isolation-api-tests">
+    <picture>
+      <source media="(max-width: 640px)" srcset="assets/projects/isolation-mobile.svg" />
+      <img src="assets/projects/isolation-desktop.svg" width="900" alt="isolation-api-tests — Isolated API & Integration Testing. Open repository." />
+    </picture>
+  </a>
+</p>
+<p align="right">
+  <a href="https://github.com/Barbaron86/isolation-api-tests/blob/main/README.md">Documentation ↗</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Barbaron86/performance-tests">
+    <picture>
+      <source media="(max-width: 640px)" srcset="assets/projects/performance-mobile.svg" />
+      <img src="assets/projects/performance-desktop.svg" width="900" alt="performance-tests — Performance & Load Testing. Open repository." />
+    </picture>
+  </a>
+</p>
+<p align="right">
+  <a href="https://github.com/Barbaron86/performance-tests/blob/main/README.md">Documentation ↗</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Barbaron86/autotest-ui">
+    <picture>
+      <source media="(max-width: 640px)" srcset="assets/projects/ui-mobile.svg" />
+      <img src="assets/projects/ui-desktop.svg" width="900" alt="autotest-ui — UI Test Automation. Open repository." />
+    </picture>
+  </a>
+</p>
+<p align="right">
+  <a href="https://github.com/Barbaron86/autotest-ui/blob/main/README.md">Documentation ↗</a>
+</p>
+--- | :--- | :--- |
 | [isolation-api-tests](https://github.com/Barbaron86/isolation-api-tests) | Microservice-based banking system (API Gateway, Operations). Demonstrates asynchronous financial operation processing via Kafka, isolated domain testing, dual HTTP/gRPC API support, and automated CI/CD test runs. | `Python 3.12` `Pytest` `gRPC` `FastAPI` `Kafka` `PostgreSQL` `SQLAlchemy` `Pydantic` `Docker` `Allure` |
 | [performance-tests](https://github.com/Barbaron86/performance-tests) | High-throughput load testing framework for a microservice-based banking system. Features decoupled HTTP/gRPC clients, automated test data seeding via Locust hooks, and CI-integrated reporting with GitHub Pages. | `Python 3.12` `Locust` `gRPC` `HTTPX` `Pydantic` `Faker` `Docker` `Prometheus` `Grafana` |
 | [autotest-ui](https://github.com/Barbaron86/autotest-ui) | Web UI test automation framework with layered Page Object architecture, cross-browser parallel execution, reusable in-memory authentication state, Allure reporting, UI interaction coverage, and CI/CD with optional AI-assisted pull request review. | `Python 3.12` `Playwright` `Pytest` `pytest-xdist` `Pydantic` `Poetry` `Ruff` `Mypy` `Allure` `Loguru` |
