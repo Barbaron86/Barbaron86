@@ -48,6 +48,30 @@ PROJECTS = (
     ),
 )
 
+
+@dataclass(frozen=True)
+class Layout:
+    card_width: int
+    card_height: int
+    body_height: int
+    padding: int
+    header_height: int
+    gap: int
+
+    @property
+    def board_width(self) -> int:
+        return self.card_width + 2 * self.padding
+
+    @property
+    def board_height(self) -> int:
+        return self.header_height + len(PROJECTS) * self.card_height + (len(PROJECTS) - 1) * self.gap + self.padding
+
+
+LAYOUTS = {
+    'desktop': Layout(900, 346, 292, 20, 178, 14),
+    'mobile': Layout(360, 398, 344, 16, 246, 12),
+}
+
 # Stroke, text and translucent fill of each technology pill.
 COLORS = {
     'Python': ('#4388e3', '#baddff', '#1a3c70'),
@@ -214,7 +238,8 @@ def repository_icon(x: int, y: int, size: int = 20) -> str:
 def render_card(project: Project, mobile: bool) -> str:
     layout = 'mobile' if mobile else 'desktop'
     prefix = f'project-{project.slug}-{layout}'
-    width, height, body_height = (360, 428, 374) if mobile else (900, 346, 292)
+    metrics = LAYOUTS[layout]
+    width, height, body_height = metrics.card_width, metrics.card_height, metrics.body_height
     technologies = project.mobile if mobile else project.desktop
     if mobile and len(technologies) > 7:
         raise ValueError('Mobile cards support at most seven technologies')
@@ -223,12 +248,12 @@ def render_card(project: Project, mobile: bool) -> str:
                        viewport=(0, 0, width, body_height))
     if mobile:
         result += icon(prefix, project.slug, 20, 24, 58)
-        result += text(project.name, 91, 45, 22, '#f3f6ff', 650)
+        result += text(project.name, 91, 45, 20, '#f3f6ff', 650)
         result += text(project.category, 91, 68, 13, '#9ccaff')
         if project.featured:
-            result += featured(91, 85)
-        description_x, description_y, available, size, leading = 20, 136, 320, 17, 23
-        badge_x, badge_y, badge_width = 20, 258, 320
+            result += '<g transform="translate(272 28) scale(.73)">' + featured(0, 0) + '</g>'
+        description_x, description_y, available, size, leading = 20, 105, 320, 17, 23
+        badge_x, badge_y, badge_width = 20, 228, 320
     else:
         result += icon(prefix, project.slug, 24, 28, 80)
         result += text(project.name, 132, 57, 28, '#f3f6ff', 650)
@@ -250,7 +275,8 @@ def render_card(project: Project, mobile: bool) -> str:
 def render_footer(action: str, mobile: bool) -> str:
     """Two equal image slices make independent HTML links on one glass footer."""
     layout = 'mobile' if mobile else 'desktop'
-    width, height, top = (360, 428, 374) if mobile else (900, 346, 292)
+    metrics = LAYOUTS[layout]
+    width, height, top = metrics.card_width, metrics.card_height, metrics.body_height
     half = width // 2
     offset = 0 if action == 'repository' else half
     prefix = f'projects-{action}-{layout}'
@@ -268,6 +294,49 @@ def render_footer(action: str, mobile: bool) -> str:
         result += f'<path d="M{x+3} {y-19}h10l5 5v18H{x+3}Zm10 0v5h5M{x+7} {y-9}h7M{x+7} {y-4}h7" fill="none" stroke="#d2e5ff" stroke-width="1.5" stroke-linejoin="round"/>'
         result += text(label, x + 26, y, 15, '#d2e5ff')
     return result + '\n</svg>\n'
+
+
+def board_slice(source: str, layout: str, viewport: tuple[int, int, int, int],
+                position: tuple[int, int], surface: bool = True) -> str:
+    """Crop a linked region from a continuous outer dashboard surface."""
+    metrics = LAYOUTS[layout]
+    root = ET.fromstring(source)
+    title, description = root.findtext(NS + 'title'), root.findtext(NS + 'desc')
+    result = start_svg(f'projects-board-{layout}', metrics.board_width, metrics.board_height,
+                       title, description, viewport)
+    content = source[source.index('<defs>'):source.rindex('</svg>')]
+    if not surface:
+        # The header belongs to the outer panel, without a second card frame.
+        defs_end = content.index('</defs>') + len('</defs>')
+        background_end = content.index('</g>', defs_end) + len('</g>')
+        content = content[:defs_end] + content[background_end:]
+    x, y = position
+    return result + f'<g transform="translate({x} {y})">' + content + '</g>\n</svg>\n'
+
+
+def render_assets() -> dict[str, str]:
+    assets = {}
+    for layout, metrics in LAYOUTS.items():
+        mobile = layout == 'mobile'
+        width, half = metrics.board_width, metrics.board_width // 2
+        assets[f'header-{layout}.svg'] = board_slice(
+            render_header(mobile), layout, (0, 0, width, metrics.header_height),
+            (metrics.padding, metrics.padding), surface=False)
+        for index, project in enumerate(PROJECTS):
+            y = metrics.header_height + index * (metrics.card_height + metrics.gap)
+            start = y - (metrics.gap if index else 0)
+            assets[f'{project.slug}-{layout}.svg'] = board_slice(
+                render_card(project, mobile), layout,
+                (0, start, width, y + metrics.body_height - start), (metrics.padding, y))
+            footer_height = metrics.card_height - metrics.body_height
+            if index == len(PROJECTS) - 1:
+                footer_height += metrics.padding
+            for action in ('repository', 'documentation'):
+                offset = 0 if action == 'repository' else half
+                assets[f'{project.slug}-{action}-{layout}.svg'] = board_slice(
+                    render_footer(action, mobile), layout,
+                    (offset, y + metrics.body_height, half, footer_height), (metrics.padding, y))
+    return assets
 
 
 def render_header(mobile: bool) -> str:
@@ -300,14 +369,7 @@ def render_header(mobile: bool) -> str:
 
 
 def generate(output: Path) -> None:
-    assets = {}
-    for mobile in (False, True):
-        layout = 'mobile' if mobile else 'desktop'
-        for project in PROJECTS:
-            assets[f'{project.slug}-{layout}.svg'] = render_card(project, mobile)
-        assets[f'header-{layout}.svg'] = render_header(mobile)
-        for action in ('repository', 'documentation'):
-            assets[f'{action}-{layout}.svg'] = render_footer(action, mobile)
+    assets = render_assets()
     # Validate every image before replacing any generated assets.
     for value in assets.values():
         ET.fromstring(value)

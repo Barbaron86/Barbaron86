@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470" height="54" viewBox="470 470 470 54" role="img" aria-labelledby="projects-board-desktop-title projects-board-desktop-desc">
+<title id="projects-board-desktop-title">Documentation</title>
+<desc id="projects-board-desktop-desc">Open project documentation.</desc>
+<defs>
+  <linearGradient id="projects-board-desktop-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18283e"/><stop offset=".45" stop-color="#091723"/><stop offset="1" stop-color="#162347"/></linearGradient>
+  <linearGradient id="projects-board-desktop-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#cabfff"/><stop offset=".35" stop-color="#5387bd"/><stop offset=".75" stop-color="#809fef"/><stop offset="1" stop-color="#d3ceff"/></linearGradient>
+  <linearGradient id="projects-board-desktop-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7e4ff" stop-opacity=".42"/><stop offset=".3" stop-color="#839bfc" stop-opacity=".13"/><stop offset=".7" stop-color="#608bd0" stop-opacity=".06"/><stop offset="1" stop-color="#9797ff" stop-opacity=".30"/></linearGradient>
+  <linearGradient id="projects-board-desktop-blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a4eeff"/><stop offset=".5" stop-color="#54abff"/><stop offset="1" stop-color="#8079ff"/></linearGradient>
+  <linearGradient id="projects-board-desktop-violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8facff"/><stop offset=".55" stop-color="#7962d9"/><stop offset="1" stop-color="#342955"/></linearGradient>
+  <radialGradient id="projects-board-desktop-halo"><stop stop-color="#54baff" stop-opacity=".9"/><stop offset=".38" stop-color="#4785f2" stop-opacity=".48"/><stop offset="1" stop-color="#527aff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="projects-board-desktop-purple"><stop stop-color="#ac86ff" stop-opacity=".7"/><stop offset=".45" stop-color="#7958d9" stop-opacity=".32"/><stop offset="1" stop-color="#634ec3" stop-opacity="0"/></radialGradient>
+  <linearGradient id="projects-board-desktop-wave" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b7a5ff" stop-opacity=".9"/><stop offset=".35" stop-color="#8461f0" stop-opacity=".55"/><stop offset="1" stop-color="#5758cb" stop-opacity=".02"/></linearGradient>
+  <filter id="projects-board-desktop-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+  <clipPath id="projects-board-desktop-clip"><rect x="1" y="1" width="938" height="1262" rx="22"/></clipPath>
+  <clipPath id="projects-board-desktop-art-clip"><rect width="226" height="266" rx="17"/></clipPath>
+</defs>
+<rect x="1" y="1" width="938" height="1262" rx="22" fill="url(#projects-board-desktop-bg)" stroke="url(#projects-board-desktop-edge)"/>
+<g aria-hidden="true" clip-path="url(#projects-board-desktop-clip)"><ellipse cx="940" cy="960.64" rx="394.8" ry="1074.4" fill="url(#projects-board-desktop-halo)" opacity=".65"/><ellipse cx="0" cy="1264" rx="300.8" ry="1087.04" fill="url(#projects-board-desktop-purple)" opacity=".65"/><ellipse cx="676.8" cy="0" rx="282" ry="1011.2" fill="url(#projects-board-desktop-purple)" opacity=".32"/><path d="M24 2H916" stroke="#f0efff" stroke-opacity=".44"/><path d="M8 24Q8 8 24 8H423" fill="none" stroke="#c4d8ff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round" filter="url(#projects-board-desktop-glow)"/></g>
+<g transform="translate(20 178)"><defs>
+  <linearGradient id="projects-documentation-desktop-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18283e"/><stop offset=".45" stop-color="#091723"/><stop offset="1" stop-color="#162347"/></linearGradient>
+  <linearGradient id="projects-documentation-desktop-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#cabfff"/><stop offset=".35" stop-color="#5387bd"/><stop offset=".75" stop-color="#809fef"/><stop offset="1" stop-color="#d3ceff"/></linearGradient>
+  <linearGradient id="projects-documentation-desktop-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7e4ff" stop-opacity=".42"/><stop offset=".3" stop-color="#839bfc" stop-opacity=".13"/><stop offset=".7" stop-color="#608bd0" stop-opacity=".06"/><stop offset="1" stop-color="#9797ff" stop-opacity=".30"/></linearGradient>
+  <linearGradient id="projects-documentation-desktop-blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a4eeff"/><stop offset=".5" stop-color="#54abff"/><stop offset="1" stop-color="#8079ff"/></linearGradient>
+  <linearGradient id="projects-documentation-desktop-violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8facff"/><stop offset=".55" stop-color="#7962d9"/><stop offset="1" stop-color="#342955"/></linearGradient>
+  <radialGradient id="projects-documentation-desktop-halo"><stop stop-color="#54baff" stop-opacity=".9"/><stop offset=".38" stop-color="#4785f2" stop-opacity=".48"/><stop offset="1" stop-color="#527aff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="projects-documentation-desktop-purple"><stop stop-color="#ac86ff" stop-opacity=".7"/><stop offset=".45" stop-color="#7958d9" stop-opacity=".32"/><stop offset="1" stop-color="#634ec3" stop-opacity="0"/></radialGradient>
+  <linearGradient id="projects-documentation-desktop-wave" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b7a5ff" stop-opacity=".9"/><stop offset=".35" stop-color="#8461f0" stop-opacity=".55"/><stop offset="1" stop-color="#5758cb" stop-opacity=".02"/></linearGradient>
+  <filter id="projects-documentation-desktop-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+  <clipPath id="projects-documentation-desktop-clip"><rect x="1" y="1" width="898" height="344" rx="22"/></clipPath>
+  <clipPath id="projects-documentation-desktop-art-clip"><rect width="226" height="266" rx="17"/></clipPath>
+</defs>
+<rect x="1" y="1" width="898" height="344" rx="22" fill="url(#projects-documentation-desktop-bg)" stroke="url(#projects-documentation-desktop-edge)"/>
+<g aria-hidden="true" clip-path="url(#projects-documentation-desktop-clip)"><ellipse cx="900" cy="262.96" rx="378" ry="294.1" fill="url(#projects-documentation-desktop-halo)" opacity=".65"/><ellipse cx="0" cy="346" rx="288" ry="297.56" fill="url(#projects-documentation-desktop-purple)" opacity=".65"/><ellipse cx="648" cy="0" rx="270" ry="276.8" fill="url(#projects-documentation-desktop-purple)" opacity=".32"/><path d="M24 2H876" stroke="#f0efff" stroke-opacity=".44"/><path d="M8 24Q8 8 24 8H405" fill="none" stroke="#c4d8ff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round" filter="url(#projects-documentation-desktop-glow)"/></g>
+<path d="M471 306h10l5 5v18H471Zm10 0v5h5M475 316h7M475 321h7" fill="none" stroke="#d2e5ff" stroke-width="1.5" stroke-linejoin="round"/><text x="494" y="325" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#d2e5ff">Documentation</text>
+</g>
+</svg>

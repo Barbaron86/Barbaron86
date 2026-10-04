@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="196" height="70" viewBox="196 1410 196 70" role="img" aria-labelledby="projects-board-mobile-title projects-board-mobile-desc">
+<title id="projects-board-mobile-title">Documentation</title>
+<desc id="projects-board-mobile-desc">Open project documentation.</desc>
+<defs>
+  <linearGradient id="projects-board-mobile-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18283e"/><stop offset=".45" stop-color="#091723"/><stop offset="1" stop-color="#162347"/></linearGradient>
+  <linearGradient id="projects-board-mobile-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#cabfff"/><stop offset=".35" stop-color="#5387bd"/><stop offset=".75" stop-color="#809fef"/><stop offset="1" stop-color="#d3ceff"/></linearGradient>
+  <linearGradient id="projects-board-mobile-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7e4ff" stop-opacity=".42"/><stop offset=".3" stop-color="#839bfc" stop-opacity=".13"/><stop offset=".7" stop-color="#608bd0" stop-opacity=".06"/><stop offset="1" stop-color="#9797ff" stop-opacity=".30"/></linearGradient>
+  <linearGradient id="projects-board-mobile-blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a4eeff"/><stop offset=".5" stop-color="#54abff"/><stop offset="1" stop-color="#8079ff"/></linearGradient>
+  <linearGradient id="projects-board-mobile-violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8facff"/><stop offset=".55" stop-color="#7962d9"/><stop offset="1" stop-color="#342955"/></linearGradient>
+  <radialGradient id="projects-board-mobile-halo"><stop stop-color="#54baff" stop-opacity=".9"/><stop offset=".38" stop-color="#4785f2" stop-opacity=".48"/><stop offset="1" stop-color="#527aff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="projects-board-mobile-purple"><stop stop-color="#ac86ff" stop-opacity=".7"/><stop offset=".45" stop-color="#7958d9" stop-opacity=".32"/><stop offset="1" stop-color="#634ec3" stop-opacity="0"/></radialGradient>
+  <linearGradient id="projects-board-mobile-wave" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b7a5ff" stop-opacity=".9"/><stop offset=".35" stop-color="#8461f0" stop-opacity=".55"/><stop offset="1" stop-color="#5758cb" stop-opacity=".02"/></linearGradient>
+  <filter id="projects-board-mobile-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+  <clipPath id="projects-board-mobile-clip"><rect x="1" y="1" width="390" height="1478" rx="22"/></clipPath>
+  <clipPath id="projects-board-mobile-art-clip"><rect width="226" height="266" rx="17"/></clipPath>
+</defs>
+<rect x="1" y="1" width="390" height="1478" rx="22" fill="url(#projects-board-mobile-bg)" stroke="url(#projects-board-mobile-edge)"/>
+<g aria-hidden="true" clip-path="url(#projects-board-mobile-clip)"><ellipse cx="392" cy="1124.8" rx="164.64" ry="1258" fill="url(#projects-board-mobile-halo)" opacity=".65"/><ellipse cx="0" cy="1480" rx="125.44" ry="1272.8" fill="url(#projects-board-mobile-purple)" opacity=".65"/><ellipse cx="282.24" cy="0" rx="117.6" ry="1184" fill="url(#projects-board-mobile-purple)" opacity=".32"/><path d="M24 2H368" stroke="#f0efff" stroke-opacity=".44"/><path d="M8 24Q8 8 24 8H176.4" fill="none" stroke="#c4d8ff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round" filter="url(#projects-board-mobile-glow)"/></g>
+<g transform="translate(16 1066)"><defs>
+  <linearGradient id="projects-documentation-mobile-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18283e"/><stop offset=".45" stop-color="#091723"/><stop offset="1" stop-color="#162347"/></linearGradient>
+  <linearGradient id="projects-documentation-mobile-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#cabfff"/><stop offset=".35" stop-color="#5387bd"/><stop offset=".75" stop-color="#809fef"/><stop offset="1" stop-color="#d3ceff"/></linearGradient>
+  <linearGradient id="projects-documentation-mobile-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7e4ff" stop-opacity=".42"/><stop offset=".3" stop-color="#839bfc" stop-opacity=".13"/><stop offset=".7" stop-color="#608bd0" stop-opacity=".06"/><stop offset="1" stop-color="#9797ff" stop-opacity=".30"/></linearGradient>
+  <linearGradient id="projects-documentation-mobile-blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a4eeff"/><stop offset=".5" stop-color="#54abff"/><stop offset="1" stop-color="#8079ff"/></linearGradient>
+  <linearGradient id="projects-documentation-mobile-violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8facff"/><stop offset=".55" stop-color="#7962d9"/><stop offset="1" stop-color="#342955"/></linearGradient>
+  <radialGradient id="projects-documentation-mobile-halo"><stop stop-color="#54baff" stop-opacity=".9"/><stop offset=".38" stop-color="#4785f2" stop-opacity=".48"/><stop offset="1" stop-color="#527aff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="projects-documentation-mobile-purple"><stop stop-color="#ac86ff" stop-opacity=".7"/><stop offset=".45" stop-color="#7958d9" stop-opacity=".32"/><stop offset="1" stop-color="#634ec3" stop-opacity="0"/></radialGradient>
+  <linearGradient id="projects-documentation-mobile-wave" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b7a5ff" stop-opacity=".9"/><stop offset=".35" stop-color="#8461f0" stop-opacity=".55"/><stop offset="1" stop-color="#5758cb" stop-opacity=".02"/></linearGradient>
+  <filter id="projects-documentation-mobile-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+  <clipPath id="projects-documentation-mobile-clip"><rect x="1" y="1" width="358" height="396" rx="22"/></clipPath>
+  <clipPath id="projects-documentation-mobile-art-clip"><rect width="226" height="266" rx="17"/></clipPath>
+</defs>
+<rect x="1" y="1" width="358" height="396" rx="22" fill="url(#projects-documentation-mobile-bg)" stroke="url(#projects-documentation-mobile-edge)"/>
+<g aria-hidden="true" clip-path="url(#projects-documentation-mobile-clip)"><ellipse cx="360" cy="302.48" rx="151.2" ry="338.3" fill="url(#projects-documentation-mobile-halo)" opacity=".65"/><ellipse cx="0" cy="398" rx="115.2" ry="342.28" fill="url(#projects-documentation-mobile-purple)" opacity=".65"/><ellipse cx="259.2" cy="0" rx="108" ry="318.4" fill="url(#projects-documentation-mobile-purple)" opacity=".32"/><path d="M24 2H336" stroke="#f0efff" stroke-opacity=".44"/><path d="M8 24Q8 8 24 8H162" fill="none" stroke="#c4d8ff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round" filter="url(#projects-documentation-mobile-glow)"/></g>
+<path d="M195 358h10l5 5v18H195Zm10 0v5h5M199 368h7M199 373h7" fill="none" stroke="#d2e5ff" stroke-width="1.5" stroke-linejoin="round"/><text x="218" y="377" font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="400" fill="#d2e5ff">Documentation</text>
+</g>
+</svg>
