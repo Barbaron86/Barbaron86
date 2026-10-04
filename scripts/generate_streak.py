@@ -13,6 +13,8 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+from activity_cards import fitted_size, glass_frame, theme_colors, validate_svg, write_svg
+
 
 GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
 
@@ -24,26 +26,10 @@ RETRYABLE_HTTP_CODES = {429, 502, 503, 504}
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_PATH = PROJECT_ROOT / "assets" / "streak-glass-template.svg"
+MOBILE_TEMPLATE_PATH = PROJECT_ROOT / "assets" / "streak-glass-mobile-template.svg"
 OUTPUT_PATH = PROJECT_ROOT / "dist" / "streak.svg"
 
-THEMES = {
-    "dark": {
-        "BG_START": "#101e3b", "BG_END": "#24142f", "BORDER": "#6557ae",
-        "BLUE": "#4aa7ff", "PURPLE": "#bb83ff", "PINK": "#fa6cbd",
-        "GLASS": "#ffffff", "GLASS_OPACITY": "0.065",
-        "INNER_BORDER": "#514b86", "DIVIDER": "#ffffff",
-        "DIVIDER_OPACITY": "0.16", "PRIMARY": "#f6f8ff",
-        "MUTED": "#a8b5d6", "HIGHLIGHT": "#ffffff", "TRACK": "#273351",
-    },
-    "light": {
-        "BG_START": "#eef5ff", "BG_END": "#fbedfa", "BORDER": "#aeb8e2",
-        "BLUE": "#2473db", "PURPLE": "#8655c6", "PINK": "#e53d87",
-        "GLASS": "#ffffff", "GLASS_OPACITY": "0.7",
-        "INNER_BORDER": "#b2badd", "DIVIDER": "#6376aa",
-        "DIVIDER_OPACITY": "0.16", "PRIMARY": "#142542",
-        "MUTED": "#536682", "HIGHLIGHT": "#ffffff", "TRACK": "#cfdaed",
-    },
-}
+MILESTONES = (7, 14, 30, 50, 75, 100, 150, 200, 365, 500, 750, 1000)
 
 PLACEHOLDER_PATTERN = re.compile(r"\{\{[A-Z_]+\}\}")
 
@@ -306,7 +292,7 @@ def calculate_longest_streak(contributions: ContributionMap) -> StreakPeriod:
             current_start = current_end = d
             current_days = 1
 
-        if current_days > longest.days:
+        if current_days >= longest.days:
             longest = StreakPeriod(
                 start=current_start, end=current_end, days=current_days,
             )
@@ -359,6 +345,7 @@ def calculate_best_day(contributions: ContributionMap) -> tuple[date | None, int
 
 def calculate_stats(contributions: ContributionMap, today: date) -> StreakStats:
     """Calculate all statistics displayed on the SVG card."""
+    contributions = {d: count for d, count in contributions.items() if d <= today}
     best_day_date, best_day_count = calculate_best_day(contributions)
 
     return StreakStats(
@@ -392,12 +379,30 @@ def format_period(period: StreakPeriod) -> str:
     return f"{format_date(period.start)} \u2014 {format_date(period.end)}"
 
 
-def render_svg(stats: StreakStats, username: str, current_year: int, theme: str = "dark") -> str:
-    """Render statistics into the SVG template."""
-    if not TEMPLATE_PATH.exists():
-        raise RuntimeError(f"SVG template not found: {TEMPLATE_PATH}")
+def next_milestone(days: int) -> int:
+    """Choose the first strictly greater goal, extending by 250 above 1000."""
+    if days < 0:
+        raise ValueError("A streak cannot contain a negative number of days")
+    return next((goal for goal in MILESTONES if goal > days), (days // 250 + 1) * 250)
 
-    template = TEMPLATE_PATH.read_text(encoding="utf-8")
+
+def render_svg(
+    stats: StreakStats, username: str, current_year: int, theme: str = "dark",
+    *, mobile: bool = False,
+) -> str:
+    """Render an independent layout from the shared statistics snapshot."""
+    colors = theme_colors(theme)
+    template_path = MOBILE_TEMPLATE_PATH if mobile else TEMPLATE_PATH
+    if not template_path.exists():
+        raise RuntimeError(f"SVG template not found: {template_path}")
+
+    template = template_path.read_text(encoding="utf-8")
+    goal = next_milestone(stats.current.days)
+    progress = min(1.0, max(0.0, stats.current.days / goal))
+    bar_width = 184 if mobile else 172
+    current_room = 212
+    if mobile:
+        current_room = 200 if stats.current.days < 10000 else 180
 
     raw_replacements = {
         "{{USERNAME}}": username,
@@ -413,33 +418,34 @@ def render_svg(stats: StreakStats, username: str, current_year: int, theme: str 
         "{{BEST_DAY_COUNT}}": str(stats.best_day_count),
         "{{BEST_DAY_DATE}}": format_date(stats.best_day_date),
         "{{LAST_ACTIVE}}": format_date(stats.last_active),
-        "{{BAR_OPACITY}}": "1" if stats.current.days else "0",
+        "{{NEXT_GOAL}}": str(goal),
+        "{{PROGRESS_WIDTH}}": f"{bar_width * progress:.4f}",
+        "{{PROGRESS_PERCENT}}": f"{progress * 100:.1f}",
+        "{{CURRENT_FONT_SIZE}}": fitted_size(stats.current.days, 76, current_room),
+        "{{TOTAL_FONT_SIZE}}": fitted_size(stats.total_contributions, 34, 128 if mobile else 190),
+        "{{LONGEST_FONT_SIZE}}": fitted_size(stats.longest.days, 34, 125 if mobile else 162),
+        "{{YEAR_FONT_SIZE}}": fitted_size(stats.current_year_contributions, 34, 128 if mobile else 190),
     }
 
-    raw_replacements.update({f"{{{{{key}}}}}": value for key, value in THEMES[theme].items()})
+    raw_replacements.update({f"{{{{{key}}}}}": value for key, value in colors.items()})
+    replacements = {key: escape(value) for key, value in raw_replacements.items()}
+    width, height = (600, 224) if mobile else (940, 258)
+    replacements["{{CARD_FRAME}}"] = glass_frame(width, height, theme)
 
-    for placeholder, raw_value in raw_replacements.items():
-        if placeholder not in template:
-            raise RuntimeError(
-                f"SVG template is missing placeholder {placeholder}"
-            )
-        template = template.replace(placeholder, escape(raw_value))
+    def replace(match: re.Match[str]) -> str:
+        try:
+            return replacements[match.group()]
+        except KeyError as error:
+            raise RuntimeError(f"Unknown SVG placeholder: {match.group()}") from error
 
-    remaining = sorted(set(PLACEHOLDER_PATTERN.findall(template)))
-    if remaining:
-        raise RuntimeError(f"Unsubstituted SVG placeholders: {remaining}")
-
-    return template
+    rendered = PLACEHOLDER_PATTERN.sub(replace, template)
+    validate_svg(rendered)
+    return rendered
 
 
 def save_svg(svg: str, filename: str = "streak.svg") -> None:
     """Write the generated SVG to the dist directory."""
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-    if not svg.endswith("\n"):
-        svg += "\n"
-
-    OUTPUT_PATH.with_name(filename).write_text(svg, encoding="utf-8")
+    write_svg(svg, OUTPUT_PATH.with_name(filename))
 
 
 def configure_logging() -> None:
@@ -468,11 +474,16 @@ def main() -> None:
         raise RuntimeError("GitHub returned no contribution calendar data")
 
     stats = calculate_stats(contributions, today)
-    dark = render_svg(stats, username, today.year, theme="dark")
-    light = render_svg(stats, username, today.year, theme="light")
-    save_svg(dark)
-    save_svg(dark, "streak-dark.svg")
-    save_svg(light, "streak-light.svg")
+    # Render and validate the complete batch before writing any asset.
+    assets = {
+        f"streak{'-mobile' if mobile else ''}-{theme}.svg": render_svg(
+            stats, username, today.year, theme, mobile=mobile,
+        )
+        for mobile in (False, True) for theme in ("dark", "light")
+    }
+    assets["streak.svg"] = assets["streak-dark.svg"]
+    for filename, content in assets.items():
+        save_svg(content, filename)
 
     logger.info(
         "Streak SVG generated successfully: %s\n"

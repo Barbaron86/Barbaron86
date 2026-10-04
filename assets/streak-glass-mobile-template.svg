@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="224" viewBox="0 0 600 224" role="img" aria-labelledby="title description">
+<title id="title">{{USERNAME}} GitHub Streak</title>
+<desc id="description">Total contributions: {{TOTAL}} since {{FIRST_CONTRIBUTION}}. Current streak: {{CURRENT}} days, {{CURRENT_RANGE}}. Next goal: {{NEXT_GOAL}} days, {{PROGRESS_PERCENT}} percent complete. Longest streak: {{LONGEST}} days, {{LONGEST_RANGE}}. Contributions {{CURRENT_YEAR}}: {{THIS_YEAR}}. Active days {{CURRENT_YEAR}}: {{ACTIVE_DAYS}}. Best day: {{BEST_DAY_COUNT}} on {{BEST_DAY_DATE}}. Last contribution: {{LAST_ACTIVE}}.</desc>
+{{CARD_FRAME}}
+<path d="M240 32V194M416 35V194M260 112H572" stroke="{{DIVIDER}}" stroke-opacity="{{DIVIDER_OPACITY}}"/>
+<g font-family="Segoe UI, Arial, sans-serif">
+<text x="32" y="50" fill="{{MUTED}}" font-size="16" font-weight="700">CURRENT STREAK</text>
+<text id="current-streak-value" x="124" y="130" text-anchor="middle" fill="{{PRIMARY}}" font-size="{{CURRENT_FONT_SIZE}}" font-weight="750">{{CURRENT}}<tspan dx="7" font-size="16" font-weight="400" fill="{{MUTED}}">days</tspan></text>
+<rect x="32" y="162" width="184" height="7" rx="3.5" fill="{{TRACK}}"/>
+<rect id="streak-progress-fill" x="32" y="162" width="{{PROGRESS_WIDTH}}" height="7" rx="3.5" fill="url(#activity-accent)"/>
+<text x="32" y="193" fill="{{MUTED}}" font-size="12">NEXT GOAL · {{NEXT_GOAL}} DAYS</text>
+<text x="276" y="53" fill="{{MUTED}}" font-size="14">TOTAL</text>
+<text x="276" y="91" fill="{{PRIMARY}}" font-size="{{TOTAL_FONT_SIZE}}" font-weight="700">{{TOTAL}}</text>
+<text x="438" y="53" fill="{{MUTED}}" font-size="14">LONGEST</text>
+<text x="438" y="91" fill="{{PURPLE}}" font-size="{{LONGEST_FONT_SIZE}}" font-weight="700">{{LONGEST}}</text>
+<text x="276" y="144" fill="{{MUTED}}" font-size="14">THIS YEAR</text>
+<text x="276" y="182" fill="{{BLUE}}" font-size="{{YEAR_FONT_SIZE}}" font-weight="700">{{THIS_YEAR}}</text>
+<text x="438" y="144" fill="{{MUTED}}" font-size="14">ACTIVE DAYS</text>
+<text x="572" y="144" text-anchor="end" fill="{{MUTED}}" font-size="11">in {{CURRENT_YEAR}}</text>
+<text x="438" y="182" fill="{{PRIMARY}}" font-size="34" font-weight="700">{{ACTIVE_DAYS}}</text>
+</g>
+</svg>
