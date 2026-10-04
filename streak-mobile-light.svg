@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="224" viewBox="0 0 600 224" role="img" aria-label="Mobile GitHub Streak statistics">
+<defs>
+<linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef5ff"/><stop offset="1" stop-color="#fbedfa"/></linearGradient>
+<linearGradient id="accent" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#2473db"/><stop offset=".55" stop-color="#8655c6"/><stop offset="1" stop-color="#e53d87"/></linearGradient>
+<linearGradient id="mountain" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#2473db" stop-opacity=".22"/><stop offset="1" stop-color="#8655c6" stop-opacity=".02"/></linearGradient>
+<clipPath id="round"><rect x="1" y="1" width="598" height="222" rx="23"/></clipPath>
+</defs>
+<rect x="1" y="1" width="598" height="222" rx="23" fill="url(#panel)" stroke="#aeb8e2" stroke-width="1.5"/>
+<g clip-path="url(#round)">
+<path d="M0 220 44 171 90 216 146 185 193 224 269 197 350 224 427 183 507 221 560 193 600 221V224H0Z" fill="url(#mountain)"/>
+<path d="M2 2H598" stroke="#ffffff" stroke-opacity=".4"/>
+<rect x="14" y="15" width="238" height="193" rx="18" fill="#ffffff" fill-opacity="0.7" stroke="#b2badd"/>
+<rect x="14" y="15" width="238" height="3" rx="1.5" fill="url(#accent)"/>
+<path d="M426 64V197M274 124H577" stroke="#6376aa" stroke-opacity="0.16"/>
+</g>
+<g font-family="Segoe UI,Arial,sans-serif">
+<text x="30" y="42" fill="#536682" font-size="17" font-weight="700" letter-spacing="1">GITHUB STREAK</text>
+<circle cx="232" cy="36" r="4" fill="#e53d87"/>
+<text x="133" y="125" text-anchor="middle" fill="#142542" font-size="75" font-weight="750">36</text>
+<text x="133" y="151" text-anchor="middle" fill="#8655c6" font-size="14" font-weight="700">CURRENT STREAK · DAYS</text>
+<text x="133" y="173" text-anchor="middle" fill="#536682" font-size="10">Aug 30, 2026 — Oct 4, 2026</text>
+<rect x="48" y="188" width="168" height="5" rx="2.5" fill="#cfdaed"/>
+<rect x="48" y="188" width="168" height="5" rx="2.5" fill="url(#accent)"/>
+<text x="33" y="207" fill="#536682" font-size="10">Every day counts</text>
+<text x="347" y="77" text-anchor="middle" fill="#536682" font-size="12">TOTAL</text>
+<text x="347" y="111" text-anchor="middle" fill="#142542" font-size="30" font-weight="700">524</text>
+<text x="499" y="77" text-anchor="middle" fill="#536682" font-size="12">LONGEST</text>
+<text x="499" y="111" text-anchor="middle" fill="#8655c6" font-size="30" font-weight="700">36</text>
+<text x="347" y="153" text-anchor="middle" fill="#536682" font-size="12">THIS YEAR</text>
+<text x="347" y="188" text-anchor="middle" fill="#2473db" font-size="28" font-weight="700">516</text>
+<text x="499" y="153" text-anchor="middle" fill="#536682" font-size="12">ACTIVE DAYS</text>
+<text x="499" y="188" text-anchor="middle" fill="#142542" font-size="28" font-weight="700">92</text>
+</g></svg>
