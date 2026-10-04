@@ -11,6 +11,7 @@ import re
 from dataclasses import dataclass
 from html import escape
 from pathlib import Path
+from urllib.parse import urlsplit
 import xml.etree.ElementTree as ET
 
 
@@ -29,6 +30,8 @@ class Project:
     mobile: tuple[str, ...]
     featured: bool = False
     art: str = 'ui'
+    secondary_label: str | None = None
+    secondary_url: str | None = None
 
 
 def load_projects(path: Path) -> tuple[Project, ...]:
@@ -43,7 +46,7 @@ def load_projects(path: Path) -> tuple[Project, ...]:
     for p in projects:
         for layout in ('desktop', 'mobile'):
             filenames.extend((f'{p.slug}-{layout}.svg', f'{p.slug}-repository-{layout}.svg',
-                              f'{p.slug}-documentation-{layout}.svg'))
+                              f'{p.slug}-secondary-{layout}.svg'))
     if len(set(filenames)) != len(filenames):
         raise ValueError('Project slugs cause generated filename collisions; choose a different slug')
     for p in projects:
@@ -59,6 +62,16 @@ def load_projects(path: Path) -> tuple[Project, ...]:
             raise ValueError(f'Invalid technology label: {p.name}')
         if p.art not in ('api', 'load', 'ui') or not isinstance(p.featured, bool):
             raise ValueError(f'Invalid art or featured value: {p.name}')
+        if (p.secondary_label is None) != (p.secondary_url is None):
+            raise ValueError(f'Secondary action requires both label and URL: {p.name}')
+        if p.secondary_label is not None:
+            if (not isinstance(p.secondary_label, str) or not p.secondary_label.strip()
+                    or not isinstance(p.secondary_url, str)
+                    or any(c.isspace() for c in p.secondary_url)):
+                raise ValueError(f'Invalid secondary action: {p.name}')
+            target = urlsplit(p.secondary_url)
+            if target.scheme != 'https' or not target.hostname:
+                raise ValueError(f'Secondary action requires an HTTPS URL: {p.name}')
     if sum(p.featured for p in projects) > 1:
         raise ValueError('Only one project may be featured')
     return projects
@@ -232,7 +245,6 @@ def illustration(prefix: str, slug: str) -> str:
             result += f'<g transform="translate({x} {y}) skewY(15)" opacity="{opacity}"><rect width="154" height="148" rx="9" fill="url(#{prefix}-blue)" fill-opacity=".23" stroke="#b3c8ff"/><rect width="154" height="148" rx="9" fill="url(#{prefix}-glass)"/><path d="M1 25H153" stroke="#a8c8ff" stroke-opacity=".6"/>'
             result += '<circle cx="12" cy="13" r="3" fill="#cc9df9"/><circle cx="23" cy="13" r="3" fill="#8abaff"/><circle cx="34" cy="13" r="3" fill="#99def0"/>'
             result += '<rect x="13" y="39" width="24" height="92" rx="4" fill="#4b70bd" opacity=".45"/><rect x="49" y="39" width="91" height="40" rx="4" fill="#6695e4" opacity=".45"/><path d="M49 94H137M49 106H128M49 118H137M49 130H105" stroke="#739dde" stroke-width="4" stroke-linecap="round"/></g>'
-    result += '<rect x="183" y="12" width="30" height="30" rx="10" fill="#8b9fea" fill-opacity=".15" stroke="#9eaff0" stroke-opacity=".45"/><path d="M193 32 204 21M193 21H204V32" fill="none" stroke="#e1eaff" stroke-width="1.8" stroke-linecap="round"/>'
     return result + '</g></g>'
 
 
@@ -275,7 +287,7 @@ def render_card(project: Project, mobile: bool) -> str:
     if mobile and len(technologies) > 7:
         raise ValueError('Mobile cards support at most seven technologies')
     result = start_svg(prefix, width, height, project.name + ' — ' + project.category,
-                       project.description + ' Technologies: ' + ', '.join(technologies) + '. Open the project repository.',
+                       project.description + ' Technologies: ' + ', '.join(technologies) + '.',
                        viewport=(0, 0, width, body_height))
     if mobile:
         result += icon(prefix, project.art, 20, 24, 58)
@@ -305,7 +317,7 @@ def render_card(project: Project, mobile: bool) -> str:
     return result + '\n</svg>\n'
 
 
-def render_footer(action: str, mobile: bool) -> str:
+def render_footer(project: Project, action: str, mobile: bool) -> str:
     """Two equal image slices make independent HTML links on one glass footer."""
     layout = 'mobile' if mobile else 'desktop'
     metrics = LAYOUTS[layout]
@@ -313,19 +325,29 @@ def render_footer(action: str, mobile: bool) -> str:
     half = width // 2
     offset = 0 if action == 'repository' else half
     prefix = f'projects-{action}-{layout}'
-    label = action.capitalize()
-    result = start_svg(prefix, width, height, label, f'Open project {action}.',
+    label = 'Source code' if action == 'repository' else project.secondary_label
+    result = start_svg(prefix, width, height, label or 'Project footer',
+                       f'Open {label} for {project.name}.' if label else 'Decorative footer surface.',
                        viewport=(offset, top, half, height - top))
+    if label is None:
+        return result + '\n</svg>\n'
     x = (20 if mobile else 132) if action == 'repository' else offset + (12 if mobile else 18)
     y = top + 33
+    icon_gap = 28 if action == 'repository' else 26
+    trailing = 24 if action == 'repository' else 16
+    size = fit_size(label, half - (x - offset) - icon_gap - trailing, 15, 12)
+    advance = text_width(label, size)
+    button_width = 8 + icon_gap + advance + trailing
+    result += (f'<rect x="{x-8:g}" y="{top+8}" width="{button_width:g}" height="38" rx="14" '
+               f'fill="url(#{prefix}-glass)" stroke="#829cda" stroke-opacity=".6"/>')
     if action == 'repository':
         result += repository_icon(x, y - 17, 21)
-        result += text(label, x + 28, y, 15, '#d2e5ff')
-        arrow = x + 117
+        result += text(label, x + 28, y, size, '#d2e5ff')
+        arrow = x + 28 + advance + 7
         result += f'<path d="M{arrow} {y-5}h12m-5-5 5 5-5 5" fill="none" stroke="#c5dfff" stroke-width="1.5"/>'
     else:
         result += f'<path d="M{x+3} {y-19}h10l5 5v18H{x+3}Zm10 0v5h5M{x+7} {y-9}h7M{x+7} {y-4}h7" fill="none" stroke="#d2e5ff" stroke-width="1.5" stroke-linejoin="round"/>'
-        result += text(label, x + 26, y, 15, '#d2e5ff')
+        result += text(label, x + 26, y, size, '#d2e5ff')
     return result + '\n</svg>\n'
 
 
@@ -364,10 +386,10 @@ def render_assets() -> dict[str, str]:
             footer_height = metrics.card_height - metrics.body_height
             if index == len(PROJECTS) - 1:
                 footer_height += metrics.padding
-            for action in ('repository', 'documentation'):
+            for action in ('repository', 'secondary'):
                 offset = 0 if action == 'repository' else half
                 assets[f'{project.slug}-{action}-{layout}.svg'] = board_slice(
-                    render_footer(action, mobile), layout,
+                    render_footer(project, action, mobile), layout,
                     (offset, y + metrics.body_height, half, footer_height), (metrics.padding, y))
     return assets
 
@@ -402,11 +424,13 @@ def render_header(mobile: bool) -> str:
 
 
 def render_readme() -> str:
-    def link(url: str, stem: str, alternative: str, width: str = '100%') -> str:
-        picture = (f'<picture><source media="(max-width: 800px)" srcset="assets/projects/{stem}-mobile.svg" />'
+    def picture(stem: str, alternative: str, width: str = '100%') -> str:
+        return (f'<picture><source media="(max-width: 800px)" srcset="assets/projects/{stem}-mobile.svg" />'
                    f'<img src="assets/projects/{stem}-desktop.svg" width="{width}" align="top" '
                    f'alt="{escape(alternative, quote=True)}" /></picture>')
-        return f'<a href="{url}">{picture}</a>'
+
+    def link(url: str, stem: str, alternative: str, width: str = '100%') -> str:
+        return f'<a href="{escape(url, quote=True)}">{picture(stem, alternative, width)}</a>'
 
     caption = ('My Projects. A collection of QA automation and performance testing projects '
                'with real-world scenarios, modern tools and CI/CD. View all repositories.')
@@ -417,10 +441,14 @@ def render_readme() -> str:
         alternative = project.name + ' — ' + project.category + '. '
         if project.featured:
             alternative += 'Featured project. '
-        alternative += project.description + ' Technologies: ' + ', '.join(project.desktop) + '. Open repository.'
-        rows.append('  ' + link(repo, project.slug, alternative) + '<br />')
-        footer = (link(repo, project.slug + '-repository', 'Repository', '50%')
-                  + link(repo + '/blob/main/README.md', project.slug + '-documentation', 'Documentation', '50%'))
+        alternative += project.description + ' Technologies: ' + ', '.join(project.desktop) + '.'
+        # An anchor without href keeps GitHub from adding an image-file link.
+        rows.append('  <a>' + picture(project.slug, alternative) + '</a><br />')
+        footer = link(repo, project.slug + '-repository', 'Source code', '50%')
+        if project.secondary_url is not None:
+            footer += link(project.secondary_url, project.slug + '-secondary', project.secondary_label, '50%')
+        else:
+            footer += '<a>' + picture(project.slug + '-secondary', '', '50%') + '</a>'
         rows.append('  ' + footer + ('<br />' if index < len(PROJECTS) - 1 else ''))
     return '\n'.join(rows + ['</p>'])
 

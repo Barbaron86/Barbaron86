@@ -25,7 +25,9 @@
       "Docker"
     ],
     "featured": true,
-    "art": "api"
+    "art": "api",
+    "secondary_label": "Architecture",
+    "secondary_url": "https://github.com/Barbaron86/isolation-api-tests/blob/main/docs/architecture/core.png"
   },
   {
     "slug": "performance",
@@ -51,7 +53,9 @@
       "Grafana"
     ],
     "featured": false,
-    "art": "load"
+    "art": "load",
+    "secondary_label": "Load report",
+    "secondary_url": "https://barbaron86.github.io/performance-tests/30481711334/"
   },
   {
     "slug": "ui",
@@ -79,6 +83,8 @@
       "Mypy"
     ],
     "featured": false,
-    "art": "ui"
+    "art": "ui",
+    "secondary_label": "Test report",
+    "secondary_url": "https://barbaron86.github.io/autotest-ui/main/"
   }
 ]

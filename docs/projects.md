@@ -23,7 +23,8 @@ To add a project, append one object:
 ```
 
 - `slug` is a unique lowercase asset filename prefix; keep it stable when renaming a repository.
-- `name` is the repository name under `Barbaron86`. Repository and documentation links are generated automatically; documentation targets `blob/main/README.md`.
+- `name` is the repository name under `Barbaron86`. The Source code button's repository link is generated automatically.
+- `secondary_label` and `secondary_url` optionally add a second button for a distinct project resource. Supply both fields together and use an HTTPS URL; omit both to show only Source code.
 - `mobile` must be a subset of `desktop` with at most seven technologies.
 - `art` selects a reusable illustration: `api` (cubes), `load` (chart), or `ui` (windows, also the default).
 - `featured` is optional and defaults to `false`; at most one project may be featured.
@@ -32,6 +33,19 @@ To add a project, append one object:
 Commit `projects.json`, the regenerated SVGs, and `README.md` together. No workflow or generator changes are needed to add a project that fits an existing layout. Reorder the list to change display order.
 
 Content is wrapped and validated before files are written. If a long name, description, or badge exceeds the layout, shorten its text; the generator reports the problem rather than cropping it silently.
+
+## Navigation
+
+Project content and illustrations are decorative; the two footer buttons provide explicit navigation. Source code opens the repository. The optional second button opens a distinct project resource, rather than repeating the repository README.
+
+```json
+"secondary_label": "Test report",
+"secondary_url": "https://example.com/report/"
+```
+
+Current resources are the API architecture diagram, an example Locust report, and the UI project's Allure report. The Locust link identifies a particular example run; update its URL to feature a different run. The UI report's `/main/` entry redirects to its published report.
+
+Every layout keeps two equal footer slices to preserve the shared outer panel. When a project has no secondary action, the right slice displays only the background and has no link. Body images use anchors without `href` to suppress GitHub's automatic links to image files.
 
 ## Technology categories
 

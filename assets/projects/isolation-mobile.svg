@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="392" height="344" viewBox="0 246 392 344" role="img" aria-labelledby="projects-board-mobile-title projects-board-mobile-desc">
 <title id="projects-board-mobile-title">isolation-api-tests — Isolated API &amp; Integration Testing</title>
-<desc id="projects-board-mobile-desc">An API testing framework with custom FastAPI mocks for service isolation. Tests real HTTP/gRPC interactions, Kafka events and PostgreSQL data. Technologies: Python, Pytest, FastAPI, gRPC, Kafka, PostgreSQL, Docker. Open the project repository.</desc>
+<desc id="projects-board-mobile-desc">An API testing framework with custom FastAPI mocks for service isolation. Tests real HTTP/gRPC interactions, Kafka events and PostgreSQL data. Technologies: Python, Pytest, FastAPI, gRPC, Kafka, PostgreSQL, Docker.</desc>
 <defs>
   <linearGradient id="projects-board-mobile-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18283e"/><stop offset=".45" stop-color="#091723"/><stop offset="1" stop-color="#162347"/></linearGradient>
   <linearGradient id="projects-board-mobile-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#cabfff"/><stop offset=".35" stop-color="#5387bd"/><stop offset=".75" stop-color="#809fef"/><stop offset="1" stop-color="#d3ceff"/></linearGradient>
