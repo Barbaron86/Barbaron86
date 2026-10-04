@@ -413,7 +413,6 @@ def render_svg(stats: StreakStats, username: str, current_year: int, theme: str 
         "{{BEST_DAY_COUNT}}": str(stats.best_day_count),
         "{{BEST_DAY_DATE}}": format_date(stats.best_day_date),
         "{{LAST_ACTIVE}}": format_date(stats.last_active),
-        "{{STREAK_MESSAGE}}": "Every day counts" if stats.current.days else "Start a new streak",
         "{{BAR_OPACITY}}": "1" if stats.current.days else "0",
     }
 
