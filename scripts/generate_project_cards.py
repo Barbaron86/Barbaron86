@@ -331,13 +331,16 @@ def render_footer(project: Project, action: str, mobile: bool) -> str:
                        viewport=(offset, top, half, height - top))
     if label is None:
         return result + '\n</svg>\n'
-    x = (20 if mobile else 132) if action == 'repository' else offset + (12 if mobile else 18)
+    x = (20 if mobile else 132) if action == 'repository' else offset + 12
     y = top + 33
     icon_gap = 28 if action == 'repository' else 26
-    trailing = 24 if action == 'repository' else 16
+    trailing = 34 if action == 'repository' else 16
     size = fit_size(label, half - (x - offset) - icon_gap - trailing, 15, 12)
     advance = text_width(label, size)
     button_width = 8 + icon_gap + advance + trailing
+    if action == 'repository':
+        # Place the source button next to the secondary action across the slice seam.
+        x = half - button_width + (4 if mobile else -4)
     result += (f'<rect x="{x-8:g}" y="{top+8}" width="{button_width:g}" height="38" rx="14" '
                f'fill="url(#{prefix}-glass)" stroke="#829cda" stroke-opacity=".6"/>')
     if action == 'repository':
