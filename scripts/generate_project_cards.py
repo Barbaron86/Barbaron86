@@ -107,7 +107,10 @@ LAYOUTS = {
 # The profile sidebar appears at 768px, reducing the README by about 288px.
 # A narrow README still needs the compact layout on a small portrait tablet.
 MOBILE_MEDIA = '(max-width: 480px), (min-width: 768px) and (max-width: 820px)'
-TABLET_MEDIA = '(max-width: 1180px)'
+TABLET_MEDIA = '(max-width: 1280px)'
+# GitHub caps the desktop README near 846px. Whole CSS pixel widths keep
+# Chrome from rounding the body and independently linked footer differently.
+DESKTOP_DISPLAY_WIDTH = 846
 
 # Stroke, text and translucent fill, shared by every tool in a category.
 CATEGORY_COLORS = {
@@ -492,8 +495,11 @@ def render_header(layout: str) -> str:
 
 
 def render_readme() -> str:
+    body_widths = dict.fromkeys(LAYOUTS, '100%')
+    body_widths['desktop'] = str(DESKTOP_DISPLAY_WIDTH)
+
     def picture(stem: str, alternative: str, widths: dict[str, str] | None = None) -> str:
-        widths = widths or dict.fromkeys(LAYOUTS, '100%')
+        widths = widths or body_widths
         return (f'<picture><source media="{MOBILE_MEDIA}" srcset="assets/projects/{stem}-mobile.svg" width="{widths["mobile"]}" />'
                    f'<source media="{TABLET_MEDIA}" srcset="assets/projects/{stem}-tablet.svg" width="{widths["tablet"]}" />'
                    f'<img src="assets/projects/{stem}-desktop.svg" width="{widths["desktop"]}" align="top" '
@@ -505,6 +511,9 @@ def render_readme() -> str:
     fractions = {layout: footer_split(layout) / metrics.board_width * 100 for layout, metrics in LAYOUTS.items()}
     widths = {layout: f'{fraction:.8f}%' for layout, fraction in fractions.items()}
     remaining = {layout: f'{100-fraction:.8f}%' for layout, fraction in fractions.items()}
+    desktop_split = round(DESKTOP_DISPLAY_WIDTH * fractions['desktop'] / 100)
+    widths['desktop'] = str(desktop_split)
+    remaining['desktop'] = str(DESKTOP_DISPLAY_WIDTH - desktop_split)
 
     caption = ('My Projects. A collection of QA automation and performance testing projects '
                'with real-world scenarios, modern tools and CI/CD. View all repositories.')
