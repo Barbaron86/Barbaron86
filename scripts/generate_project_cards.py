@@ -60,7 +60,7 @@ def load_projects(path: Path) -> tuple[Project, ...]:
             raise ValueError(f'Mobile stack must contain at most seven desktop technologies: {p.name}')
         if any(not isinstance(label, str) or not label for label in p.desktop):
             raise ValueError(f'Invalid technology label: {p.name}')
-        if p.art not in ('api', 'load', 'ui') or not isinstance(p.featured, bool):
+        if p.art not in ('api', 'http', 'load', 'ui') or not isinstance(p.featured, bool):
             raise ValueError(f'Invalid art or featured value: {p.name}')
         if (p.secondary_label is None) != (p.secondary_url is None):
             raise ValueError(f'Secondary action requires both label and URL: {p.name}')
@@ -212,6 +212,12 @@ def icon(prefix: str, slug: str, x: int, y: int, size: int) -> str:
     result = f'<g aria-hidden="true" transform="translate({x} {y}) scale({size/80:g})"><rect x="1" y="1" width="78" height="78" rx="18" fill="url(#{prefix}-glass)" stroke="#8298d6"/><ellipse cx="40" cy="44" rx="32" ry="30" fill="url(#{prefix}-halo)"/>'
     if slug == 'api':
         result += f'<g filter="url(#{prefix}-glow)">{cube(prefix, 20, 18, .5)}</g>' + cube(prefix, 20, 18, .5)
+    elif slug == 'http':
+        result += f'''<rect x="13" y="16" width="44" height="20" rx="6" fill="url(#{prefix}-glass)" stroke="#94d8ff" stroke-width="1.5"/>
+<path d="M23 26H46m-5-4 5 4-5 4M57 28h6v19" fill="none" stroke="#9ddfff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="23" y="44" width="44" height="21" rx="6" fill="#17474c" fill-opacity=".65" stroke="#89dfc5" stroke-width="1.5"/>
+<path d="m36 54 5 5 11-11" fill="none" stroke="#adf7d5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M23 54h-7V36" fill="none" stroke="#8fb6ed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'''
     elif slug == 'load':
         result += f'''<path d="M17 60A29 29 0 1 1 63 60" fill="none" stroke="url(#{prefix}-blue)" stroke-width="4"/>
 <path d="M20 48 25 46M23 29 28 32M40 20V26M57 29 52 32M60 48 55 46" stroke="#a3c7ff" stroke-width="3" stroke-linecap="round"/>
@@ -235,6 +241,32 @@ def illustration(prefix: str, slug: str, x: int = 653, y: int = 20, scale: float
         result += f'<g opacity=".7" filter="url(#{prefix}-glow)">{cube(prefix, 60, 60, 1.3)}</g>'
         for y, opacity in [(124, .32), (92, .55), (60, 1)]:
             result += cube(prefix, 60, y, 1.3, opacity)
+    elif slug == 'http':
+        result += f'''<g transform="translate(20 30)">
+<rect x="8" y="-7" width="174" height="80" rx="12" fill="url(#{prefix}-blue)" fill-opacity=".10" stroke="#a8c8ff" stroke-opacity=".3"/>
+<rect width="174" height="80" rx="12" fill="#132d4e" fill-opacity=".8" stroke="#8dbdf4"/>
+<rect width="174" height="80" rx="12" fill="url(#{prefix}-glass)"/>
+<path d="M1 29H173" stroke="#a4cfff" stroke-opacity=".35"/>
+<circle cx="13" cy="15" r="3" fill="#98cfff"/>
+{text('HTTP REQUEST', 24, 19, 10, '#b9deff', 600)}
+{text('GET', 14, 51, 13, '#9ce8ff', 650)}
+{text('/api', 53, 51, 12, '#d5e7ff')}
+<path d="M14 65H95M107 65H150" stroke="#7ba8e0" stroke-opacity=".65" stroke-width="3" stroke-linecap="round"/>
+</g>
+<path d="M107 113v20m-5-5 5 5 5-5" fill="none" stroke="#9bdcff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="translate(36 141)">
+<rect x="8" y="-7" width="174" height="91" rx="12" fill="url(#{prefix}-blue)" fill-opacity=".10" stroke="#a8c8ff" stroke-opacity=".3"/>
+<rect width="174" height="91" rx="12" fill="#132d4e" fill-opacity=".8" stroke="#8dbdf4"/>
+<rect width="174" height="91" rx="12" fill="url(#{prefix}-glass)"/>
+<path d="M1 29H173" stroke="#a4cfff" stroke-opacity=".35"/>
+<circle cx="13" cy="15" r="3" fill="#93e4c5"/>
+{text('200 OK', 24, 19, 11, '#adf7d5', 650)}
+<path d="M25 42h-5v9l-4 4 4 4v9h5M88 42h5v9l4 4-4 4v9h-5" fill="none" stroke="#a5d8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M35 47H76M35 56H65M35 65H72" stroke="#88b9ef" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/>
+<circle cx="133" cy="56" r="20" fill="#236b62" fill-opacity=".4" stroke="#92e6ca" stroke-opacity=".8"/>
+<path d="m123 56 7 7 13-14" fill="none" stroke="#b6ffe0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+{text('SCHEMA VALIDATED', 58, 250, 10, '#b7d8ee', 600)}'''
     elif slug == 'load':
         result += '<g stroke="#6c7ad9" stroke-dasharray="2 5" opacity=".35">'
         for x in (35, 82, 130, 177):
