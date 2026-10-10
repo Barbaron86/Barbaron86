@@ -26,7 +26,7 @@ To add a project, append one object:
 - `name` is the repository name under `Barbaron86`. The Source code button's repository link is generated automatically.
 - `secondary_label` and `secondary_url` optionally add a second button for a distinct project resource. Supply both fields together and use an HTTPS URL; omit both to show only Source code.
 - `mobile` must be a subset of `desktop` with at most seven technologies.
-- `art` selects a reusable illustration: `api` (cubes), `load` (chart), or `ui` (windows, also the default).
+- `art` selects a reusable illustration: `api` (cubes), `http` (HTTP request and validated JSON response), `load` (chart), or `ui` (windows, also the default).
 - `featured` is optional and defaults to `false`; at most one project may be featured.
 - New technology labels get a neutral glass badge automatically. Assign their category in `technologies.json` to use the shared category color.
 
@@ -43,7 +43,7 @@ Project content and illustrations are decorative; the two footer buttons provide
 "secondary_url": "https://example.com/report/"
 ```
 
-Current resources are the API architecture diagram, the latest published Locust report, and the UI project's Allure report. The report links use their stable `/latest/` and `/main/` entries.
+Current resources are the isolated API architecture diagram, the API and UI projects' Allure reports, and the latest published Locust report. The report links use their stable `/latest/` and `/main/` entries.
 
 The generator draws a complete board once per layout, including the outer surface, each card's frame, and both buttons. `board_slice()` crops that same scene for the header, card bodies, and two independently linked footer images. The footer boundary is a whole SVG pixel inside the button gap. Image dimensions and `viewBox` extents are identical integers; `preserveAspectRatio="none"` on the crops prevents separate aspect-ratio letterboxing after browser subpixel rounding.
 

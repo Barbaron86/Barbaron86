@@ -3,7 +3,7 @@
     "slug": "isolation",
     "name": "isolation-api-tests",
     "category": "Isolated API & Integration Testing",
-    "description": "Isolated API testing with custom HTTP/gRPC mock servers, real service interactions, and validation of Kafka-driven operations and PostgreSQL data.",
+    "description": "Service-level testing with controlled dependencies, gateway interaction checks, asynchronous operation scenarios, and validation of persisted data.",
     "desktop": [
       "Python",
       "Pytest",
@@ -30,10 +30,40 @@
     "secondary_url": "https://github.com/Barbaron86/isolation-api-tests/blob/main/docs/architecture/core.png"
   },
   {
+    "slug": "api",
+    "name": "autotest-api",
+    "category": "API Test Automation",
+    "description": "API regression testing with typed domain clients, reusable fixtures, generated test data, response schema validation, and positive and negative scenarios.",
+    "desktop": [
+      "Python",
+      "Pytest",
+      "HTTPX",
+      "Pydantic",
+      "pytest-xdist",
+      "Allure",
+      "Loguru",
+      "Docker",
+      "Poetry"
+    ],
+    "mobile": [
+      "Python",
+      "Pytest",
+      "HTTPX",
+      "Pydantic",
+      "Allure",
+      "Loguru",
+      "Docker"
+    ],
+    "featured": false,
+    "art": "http",
+    "secondary_label": "Test report",
+    "secondary_url": "https://barbaron86.github.io/autotest-api/main/"
+  },
+  {
     "slug": "performance",
     "name": "performance-tests",
     "category": "Performance & Load Testing",
-    "description": "Locust-based load testing with reusable HTTP/gRPC clients, automated data seeding, Prometheus/Grafana monitoring, and CI-generated reports.",
+    "description": "Load testing of selected service workflows with independent clients, automated data preparation, and purchase, card issuance, and account scenarios.",
     "desktop": [
       "Python",
       "Locust",
@@ -61,7 +91,7 @@
     "slug": "ui",
     "name": "autotest-ui",
     "category": "UI Test Automation",
-    "description": "Playwright UI automation with layered Page Object architecture, parallel cross-browser runs, in-memory authentication state, Allure reporting, and CI/CD.",
+    "description": "UI regression testing with separate page, component, and element layers, in-memory authentication state, and parallel cross-browser scenarios.",
     "desktop": [
       "Python",
       "Playwright",
