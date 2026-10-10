@@ -108,9 +108,10 @@ LAYOUTS = {
 # A narrow README still needs the compact layout on a small portrait tablet.
 MOBILE_MEDIA = '(max-width: 480px), (min-width: 768px) and (max-width: 820px)'
 TABLET_MEDIA = '(max-width: 1280px)'
-# GitHub caps the desktop README near 846px. Whole CSS pixel widths keep
-# Chrome from rounding the body and independently linked footer differently.
-DESKTOP_DISPLAY_WIDTH = 846
+# The GitHub repository README can have a narrower content box than the profile
+# even at desktop viewport widths. Both SVG crops must scale with that box.
+# Leave headroom for fractional pixels, Markdown renderer and zoom rounding.
+README_BOARD_WIDTH_PERCENT = 98.0
 
 # Stroke, text and translucent fill, shared by every tool in a category.
 CATEGORY_COLORS = {
@@ -527,8 +528,7 @@ def render_header(layout: str) -> str:
 
 
 def render_readme() -> str:
-    body_widths = dict.fromkeys(LAYOUTS, '100%')
-    body_widths['desktop'] = str(DESKTOP_DISPLAY_WIDTH)
+    body_widths = dict.fromkeys(LAYOUTS, f'{README_BOARD_WIDTH_PERCENT:g}%')
 
     def picture(stem: str, alternative: str, widths: dict[str, str] | None = None) -> str:
         widths = widths or body_widths
@@ -540,12 +540,13 @@ def render_readme() -> str:
     def link(url: str, stem: str, alternative: str, widths: dict[str, str] | None = None) -> str:
         return f'<a href="{escape(url, quote=True)}">{picture(stem, alternative, widths)}</a>'
 
-    fractions = {layout: footer_split(layout) / metrics.board_width * 100 for layout, metrics in LAYOUTS.items()}
-    widths = {layout: f'{fraction:.8f}%' for layout, fraction in fractions.items()}
-    remaining = {layout: f'{100-fraction:.8f}%' for layout, fraction in fractions.items()}
-    desktop_split = round(DESKTOP_DISPLAY_WIDTH * fractions['desktop'] / 100)
-    widths['desktop'] = str(desktop_split)
-    remaining['desktop'] = str(DESKTOP_DISPLAY_WIDTH - desktop_split)
+    # <source width=...> is only applied for matching media. On desktop Chrome
+    # uses <img width=...>, so all three layouts must be responsive there too.
+    # A shared percentage and matching slice fractions keep both clickable
+    # footer images aligned with the body, with no forced line wrapping.
+    fractions = {layout: footer_split(layout) / metrics.board_width for layout, metrics in LAYOUTS.items()}
+    widths = {layout: f'{fraction * README_BOARD_WIDTH_PERCENT:.8f}%' for layout, fraction in fractions.items()}
+    remaining = {layout: f'{(1 - fraction) * README_BOARD_WIDTH_PERCENT:.8f}%' for layout, fraction in fractions.items()}
 
     caption = ('My Projects. A collection of QA automation and performance testing projects '
                'with real-world scenarios, modern tools and CI/CD. View all repositories.')
