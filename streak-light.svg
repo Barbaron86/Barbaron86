@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="940" height="258" viewBox="0 0 940 258" role="img" aria-labelledby="title description">
 <title id="title">Barbaron86 GitHub Streak</title>
-<desc id="description">Total contributions: 763 since Mar 13, 2025. Current streak: 61 days, Aug 30, 2026 — Oct 29, 2026. Next goal: 75 days, 81.3 percent complete. Longest streak: 61 days, Aug 30, 2026 — Oct 29, 2026. Contributions 2026: 755. Active days 2026: 117. Best day: 34 on Oct 4, 2026. Last contribution: Oct 29, 2026.</desc>
+<desc id="description">Total contributions: 763 since Mar 13, 2025. Current streak: 0 days, —. Next goal: 7 days, 0.0 percent complete. Longest streak: 61 days, Aug 30, 2026 — Oct 29, 2026. Contributions 2026: 755. Active days 2026: 117. Best day: 34 on Oct 4, 2026. Last contribution: Oct 29, 2026.</desc>
 <defs>
   <linearGradient id="activity-background" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e6f5ff"/><stop offset=".55" stop-color="#ffffff"/><stop offset="1" stop-color="#fbedfa"/></linearGradient>
   <linearGradient id="activity-border" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2473db"/><stop offset=".3" stop-color="#2473db" stop-opacity=".5"/><stop offset=".68" stop-color="#8655c6" stop-opacity=".65"/><stop offset="1" stop-color="#e53d87"/></linearGradient>
@@ -32,12 +32,12 @@
 <g font-family="Segoe UI, Arial, sans-serif">
 <text x="36" y="44" fill="#536682" font-size="14" font-weight="700" letter-spacing="1">GITHUB STREAK</text>
 <circle cx="249" cy="38" r="4" fill="#e53d87"/>
-<text id="current-streak-value" x="144" y="123" text-anchor="middle" fill="#142542" font-size="76.00" font-weight="750">61</text>
+<text id="current-streak-value" x="144" y="123" text-anchor="middle" fill="#142542" font-size="76.00" font-weight="750">0</text>
 <text x="144" y="151" text-anchor="middle" fill="#8655c6" font-size="14" font-weight="700">CURRENT STREAK · DAYS</text>
-<text x="144" y="174" text-anchor="middle" fill="#536682" font-size="11">Aug 30, 2026 — Oct 29, 2026</text>
+<text x="144" y="174" text-anchor="middle" fill="#536682" font-size="11">—</text>
 <rect x="58" y="190" width="172" height="6" rx="3" fill="#cfdaed"/>
-<rect id="streak-progress-fill" x="58" y="190" width="139.8933" height="6" rx="3" fill="url(#activity-accent)"/>
-<text x="144" y="220" text-anchor="middle" fill="#536682" font-size="12">NEXT GOAL · 75 DAYS</text>
+<rect id="streak-progress-fill" x="58" y="190" width="0.0000" height="6" rx="3" fill="url(#activity-accent)"/>
+<text x="144" y="220" text-anchor="middle" fill="#536682" font-size="12">NEXT GOAL · 7 DAYS</text>
 <text x="396" y="60" text-anchor="middle" fill="#536682" font-size="14">TOTAL CONTRIBUTIONS</text>
 <text x="396" y="105" text-anchor="middle" fill="#142542" font-size="34.00" font-weight="750">763</text>
 <text x="396" y="123" text-anchor="middle" fill="#536682" font-size="11">Since Mar 13, 2025</text>
