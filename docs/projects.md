@@ -43,7 +43,7 @@ Project content and illustrations are decorative; the two footer buttons provide
 "secondary_url": "https://example.com/report/"
 ```
 
-Current resources are the isolated API architecture diagram, the API and UI projects' Allure reports, and the latest published Locust report. The report links use their stable `/latest/` and `/main/` entries.
+Current resources are the isolation, API, and UI projects' Allure reports and the latest published Locust report. Each link uses the project's stable report entry.
 
 The generator draws a complete board once per layout, including the outer surface, each card's frame, and both buttons. `board_slice()` crops that same scene for the header, card bodies, and two independently linked footer images. The footer boundary is a whole SVG pixel inside the button gap. Image dimensions and `viewBox` extents are identical integers; `preserveAspectRatio="none"` on the crops prevents separate aspect-ratio letterboxing after browser subpixel rounding.
 

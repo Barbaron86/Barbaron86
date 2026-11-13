@@ -26,8 +26,8 @@
     ],
     "featured": true,
     "art": "api",
-    "secondary_label": "Architecture",
-    "secondary_url": "https://github.com/Barbaron86/isolation-api-tests/blob/main/docs/architecture/core.png"
+    "secondary_label": "Test report",
+    "secondary_url": "https://barbaron86.github.io/isolation-api-tests/"
   },
   {
     "slug": "api",
